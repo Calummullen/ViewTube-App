@@ -1,4 +1,5 @@
 import { GeistSans } from "geist/font/sans";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -19,7 +20,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={GeistSans.className}>
       <body className="bg-black text-foreground">
-        <main>{children}</main>
+        <main>
+          {children}
+          <Analytics />
+        </main>
       </body>
     </html>
   );
