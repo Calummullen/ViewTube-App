@@ -1,20 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowLeft,
-  BarChart3,
-  Edit3,
-  Globe,
-  Layout,
-  LayoutDashboard,
-  Megaphone,
-  Menu,
-  Newspaper,
-  Settings,
-  FileCode,
-  Github,
-} from "lucide-react";
+import { LayoutDashboard, Menu, Settings, TrendingUp } from "lucide-react";
 import {
   useParams,
   usePathname,
@@ -23,26 +10,6 @@ import {
 import { ReactNode, useEffect, useMemo, useState } from "react";
 
 const externalLinks = [
-  // {
-  //   name: "Read announcement",
-  //   href: "https://vercel.com/blog/platforms-starter-kit",
-  //   icon: <Megaphone width={18} />,
-  // },
-  // {
-  //   name: "Star on GitHub",
-  //   href: "https://github.com/vercel/platforms",
-  //   icon: <Github width={18} />,
-  // },
-  // {
-  //   name: "Read the guide",
-  //   href: "https://vercel.com/guides/nextjs-multi-tenant-application",
-  //   icon: <FileCode width={18} />,
-  // },
-  // {
-  //   name: "View demo site",
-  //   href: "https://demo.vercel.pub",
-  //   icon: <Layout width={18} />,
-  // },
   {
     name: "Deploy your own",
     href: "https://vercel.com/templates/next.js/platforms-starter-kit",
@@ -73,6 +40,12 @@ export const Nav = ({ children }: { children: ReactNode }) => {
         href: "/",
         isActive: segments.length === 0,
         icon: <LayoutDashboard width={18} />,
+      },
+      {
+        name: "Trending",
+        href: "/trending",
+        isActive: segments[0] === "trending",
+        icon: <TrendingUp width={18} />,
       },
       {
         name: "Settings",
@@ -106,9 +79,9 @@ export const Nav = ({ children }: { children: ReactNode }) => {
       <div
         className={`transform ${
           showSidebar ? "w-full translate-x-0" : "-translate-x-full"
-        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 p-4 transition-all dark:border-stone-700 dark:bg-stone-900 sm:w-60 sm:translate-x-0`}
+        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 transition-all dark:border-stone-700 dark:bg-stone-900 sm:w-60 sm:translate-x-0`}
       >
-        <div className="grid gap-2">
+        <div className="flex flex-col h-full">
           <div className="flex items-center space-x-2 rounded-lg px-2 py-1.5">
             <a
               href="https://vercel.com/templates/next.js/platforms-starter-kit"
@@ -130,22 +103,21 @@ export const Nav = ({ children }: { children: ReactNode }) => {
               </svg>
             </a>
           </div>
-          <div className="grid gap-1">
-            {tabs.map(({ name, href, isActive, icon }) => (
-              <Link
-                key={name}
-                href={href}
-                className={`flex items-center space-x-3 ${
-                  isActive ? "bg-stone-200 text-black dark:bg-stone-700" : ""
-                } rounded-lg px-2 py-1.5 transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:text-white dark:hover:bg-stone-700 dark:active:bg-stone-800`}
-              >
-                {icon}
-                <span className="text-sm font-medium">{name}</span>
-              </Link>
-            ))}
-          </div>
+
+          {tabs.map(({ name, href, isActive, icon }) => (
+            <Link
+              key={name}
+              href={href}
+              className={`flex items-center gap-4 py-4 px-6 ${
+                isActive ? "bg-stone-200 text-black dark:bg-stone-700 " : ""
+              } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:text-white dark:hover:bg-stone-700 dark:active:bg-stone-800`}
+            >
+              {icon}
+              <span className="text-sm font-medium">{name}</span>
+            </Link>
+          ))}
         </div>
-        <div>
+        {/* <div>
           <div className="grid gap-1">
             {externalLinks.map(({ name, href, icon }) => (
               <a
@@ -164,7 +136,7 @@ export const Nav = ({ children }: { children: ReactNode }) => {
             ))}
           </div>
           {children}
-        </div>
+        </div> */}
       </div>
     </>
   );

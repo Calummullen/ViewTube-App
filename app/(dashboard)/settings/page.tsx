@@ -1,7 +1,9 @@
+import { Suspense } from "react";
+
 const SettingsPage = () => (
-  <div>
+  <Suspense>
     <p>Settings Page</p>
-  </div>
+  </Suspense>
 );
 
 export default SettingsPage;
