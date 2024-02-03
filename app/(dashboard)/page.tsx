@@ -1,9 +1,6 @@
+import { Dashboard } from "@/components/dashboard";
 import { FC } from "react";
 
-const DashboardPage: FC = async () => (
-  <div>
-    <p>Dashboard Page</p>
-  </div>
-);
+const DashboardPage: FC = async () => <Dashboard />;
 
 export default DashboardPage;
