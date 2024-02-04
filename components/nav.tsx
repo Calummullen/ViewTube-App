@@ -7,7 +7,13 @@ import {
   usePathname,
   useSelectedLayoutSegments,
 } from "next/navigation";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+import { User } from "@supabase/supabase-js";
+
+interface Props {
+  user: User;
+  children: ReactNode;
+}
 
 const externalLinks = [
   {
@@ -27,7 +33,7 @@ const externalLinks = [
   },
 ];
 
-export const Nav = ({ children }: { children: ReactNode }) => {
+export const Nav: FC<Props> = ({ user, children }) => {
   const segments = useSelectedLayoutSegments();
   const { id } = useParams() as { id?: string };
 
@@ -68,41 +74,19 @@ export const Nav = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <button
-        className={`fixed z-20 ${
-          // left align for Editor, right align for other pages
-          !showSidebar ? "left-5 top-5" : "right-5 top-7"
-        } sm:hidden`}
+        className={`fixed z-20 right-5 top-3 sm:hidden`}
         onClick={() => setShowSidebar(!showSidebar)}
       >
         <Menu width={20} />
       </button>
       <div
         className={`transform ${
-          showSidebar ? "w-full translate-x-0" : "-translate-x-full"
-        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 transition-all dark:border-stone-700 dark:bg-stone-900 sm:w-60 sm:translate-x-0`}
+          showSidebar ? "w-[75%] translate-x-0" : "-translate-x-full"
+        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 transition-all dark:border-stone-700 dark:bg-stone-900 sm:w-80 sm:translate-x-0`}
       >
         <div className="flex flex-col h-full">
-          <div className="flex items-center space-x-2 rounded-lg px-2 py-1.5">
-            <a
-              href="https://vercel.com/templates/next.js/platforms-starter-kit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-lg p-1.5 hover:bg-stone-200 dark:hover:bg-stone-700"
-            >
-              <svg
-                width="26"
-                viewBox="0 0 76 65"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-black dark:text-white"
-              >
-                <path
-                  d="M37.5274 0L75.0548 65H0L37.5274 0Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </a>
-          </div>
+          {/* <Heading /> */}
+          <p className="font-bold text-lg p-4 break-all">{user.email}</p>
 
           {tabs.map(({ name, href, isActive, icon }) => (
             <Link
@@ -113,7 +97,7 @@ export const Nav = ({ children }: { children: ReactNode }) => {
               } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:text-white dark:hover:bg-stone-700 dark:active:bg-stone-800`}
             >
               {icon}
-              <span className="text-sm font-medium">{name}</span>
+              <span className="text-lg font-medium">{name}</span>
             </Link>
           ))}
         </div>

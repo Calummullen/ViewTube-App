@@ -8,18 +8,21 @@ interface Props {
 }
 
 const DashboardLayout: FC<Props> = async ({ children }) => {
-  const isUserLoggedIn = await getUser();
+  const user = await getUser();
 
-  if (!isUserLoggedIn) {
+  if (!user) {
     redirect("/login");
   }
 
   return (
     <div>
-      <Nav>
+      <Nav user={user}>
         <Suspense fallback={<div>Loading...</div>}></Suspense>
       </Nav>
-      <div className="min-h-screen dark:bg-black sm:ml-60 p-4">{children}</div>
+      <div className="min-h-screen dark:bg-black sm:ml-80 flex flex-col">
+        <div className="sm:hidden flex">{/* <Heading /> */}</div>
+        <div className="p-4">{children}</div>
+      </div>
     </div>
   );
 };
