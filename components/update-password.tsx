@@ -4,6 +4,7 @@ import { updateUserPassword } from "@/app/actions";
 import { FC, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 interface UpdatePassword {
   password: string;
@@ -21,6 +22,7 @@ const UpdatePassword: FC = () => {
     error: string;
     success: string;
   }>();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const onSubmit: SubmitHandler<UpdatePassword> = async (
@@ -36,7 +38,13 @@ const UpdatePassword: FC = () => {
         error: `An error occurred while resetting your password.`,
         success: "",
       });
-    }
+    } else router.push("/");
+
+    // return redirect("/");
+    // setApiError({
+    //   error: "",
+    //   success: "Successfully updated password.",
+    // });
   };
   console.log(apiError);
   return (

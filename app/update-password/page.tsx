@@ -1,8 +1,12 @@
 import UpdatePassword from "@/components/update-password";
-import { FC } from "react";
+import { FC, Suspense } from "react";
 
 const UpdatePasswordPage: FC = () => {
-  return <UpdatePassword />;
+  return (
+    <Suspense>
+      <UpdatePassword />
+    </Suspense>
+  );
 };
 
 export default UpdatePasswordPage;
