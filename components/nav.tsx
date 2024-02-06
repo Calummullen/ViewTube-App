@@ -1,7 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { LayoutDashboard, Menu, Settings, TrendingUp } from "lucide-react";
+import {
+  LayoutDashboard,
+  Menu,
+  Settings,
+  TrendingUp,
+  LogOut,
+} from "lucide-react";
 import {
   useParams,
   usePathname,
@@ -9,6 +15,7 @@ import {
 } from "next/navigation";
 import { FC, ReactNode, useEffect, useMemo, useState } from "react";
 import { User } from "@supabase/supabase-js";
+import { logout } from "@/utils/supabase/userHelper";
 
 interface Props {
   user: User;
@@ -86,7 +93,7 @@ export const Nav: FC<Props> = ({ user, children }) => {
       >
         <div className="flex flex-col h-full">
           {/* <Heading /> */}
-          <p className="font-bold text-lg p-4 break-all">{user.email}</p>
+          <p className="font-bold text-lg p-4 break-all">{`${user.user_metadata.firstName} ${user.user_metadata.surname}`}</p>
 
           {tabs.map(({ name, href, isActive, icon }) => (
             <Link
@@ -100,6 +107,14 @@ export const Nav: FC<Props> = ({ user, children }) => {
               <span className="text-lg font-medium">{name}</span>
             </Link>
           ))}
+        </div>
+        <div className="m-2">
+          <button
+            onClick={async () => logout()}
+            className="rounded-md bg-red-500 text-white text-lg p-4 w-full"
+          >
+            Logout
+          </button>
         </div>
         {/* <div>
           <div className="grid gap-1">

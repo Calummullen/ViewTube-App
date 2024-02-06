@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { getUser } from "@/utils/supabase/userHelper";
 
-const Login = async ({
+const LoginPage = async ({
   searchParams,
 }: {
   searchParams: { message: string };
@@ -33,30 +33,6 @@ const Login = async ({
     }
 
     return redirect("/");
-  };
-
-  const signUp = async (formData: FormData) => {
-    "use server";
-
-    const origin = headers().get("origin");
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const cookieStore = cookies();
-    const supabase = createClient(cookieStore);
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      return redirect("/login?message=Could not authenticate user");
-    }
-
-    return redirect("/login?message=Check email to continue sign in process");
   };
 
   return (
@@ -95,8 +71,14 @@ const Login = async ({
         )}
         <p className="text-sm">
           No account?{" "}
-          <Link className="text-red-500" href={"/register"}>
+          <Link className="text-green-500" href={"/register"}>
             Sign up
+          </Link>
+        </p>
+        <p className="text-sm">
+          Forgot your password?{" "}
+          <Link className="text-red-500" href={"/reset-password"}>
+            Reset it here
           </Link>
         </p>
       </form>
@@ -165,4 +147,4 @@ const Login = async ({
   );
 };
 
-export default Login;
+export default LoginPage;

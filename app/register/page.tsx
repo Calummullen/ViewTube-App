@@ -1,13 +1,16 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import { registerUser } from "../actions";
 import RegistrationForm from "@/components/registration-form";
+import { RegisterUser } from "../entities/supabase/register-user";
+import { registerUserAction } from "../actions";
+import { getUser } from "@/utils/supabase/userHelper";
+import { redirect } from "next/navigation";
 
-const Login = async () => {
-  // const isUserLoggedIn = await getUser();
+const RegisterPage = async () => {
+  const isUserLoggedIn = await getUser();
 
-  // if (isUserLoggedIn) {
-  //   redirect("/");
-  // }
+  if (isUserLoggedIn) {
+    redirect("/");
+  }
 
   // const {
   //   register,
@@ -89,4 +92,4 @@ const Login = async () => {
   );
 };
 
-export default Login;
+export default RegisterPage;

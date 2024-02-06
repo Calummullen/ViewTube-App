@@ -1,34 +1,73 @@
+"use server";
+
 import { headers, cookies } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { Inputs } from "@/components/registration-form";
+import { RegisterUser } from "./entities/supabase/register-user";
+import { redirect } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
-export async function registerUser(data: Inputs) {
-  console.log("sdfsdfsdfds");
-  console.log(data);
-}
+const createSBClient = () => {
+  const cookieStore = cookies();
+  return createClient(cookieStore);
+};
+
+export const updateUserPassword = async (
+  authCode: string,
+  password: string
+) => {
+  const createClient = createSBClient();
+  await createClient.auth.exchangeCodeForSession(authCode);
+  const response = await createClient.auth.updateUser(
+    { password },
+    {
+      emailRedirectTo: "/",
+    }
+  );
+  console.log("error", response);
+  return JSON.stringify(response);
+};
+
+export const resetUserPassword = async (formData: { email: string }) => {
+  const createClient = createSBClient();
+  const response = await createClient.auth.resetPasswordForEmail(
+    formData.email,
+    {
+      redirectTo: `http://localhost:3000/update-password`,
+    }
+  );
+  return JSON.stringify(response);
+};
+
+export const registerUserAction = async (
+  formData: RegisterUser
+): Promise<string> => {
+  const origin = headers().get("origin");
+  const createClient = createSBClient();
+  const { confirmPassword, ...convertedData } = formData;
+  const { email, password, firstName, surname } = convertedData;
+
+  const response = await createClient.auth.signUp({
+    email,
+    password,
+    options: {
+      emailRedirectTo: `${origin}/auth/callback`,
+      data: {
+        firstName,
+        surname,
+      },
+    },
+  });
+
+  return JSON.stringify(response);
+
+  // if (error) {
+  //   return redirect("/login?message=Could not authenticate user");
+  // }
+
+  // return redirect("/login?message=Check email to continue sign in process");
+};
 
 // const register = async (formData: FormData) => {
-//   "use server";
-
-//   const origin = headers().get("origin");
-//   const firstName = formData.get("firstName") as string;
-//   const surname = formData.get("surname") as string;
-//   const email = formData.get("email") as string;
-//   const password = formData.get("password") as string;
-//   const cookieStore = cookies();
-//   const supabase = createClient(cookieStore);
-
-//   const { error } = await supabase.auth.signUp({
-//     email,
-//     password,
-//     options: {
-//       emailRedirectTo: `${origin}/auth/callback`,
-//       data: {
-//         firstName,
-//         surname,
-//       },
-//     },
-//   });
 
 //   if (error) {
 //     return redirect("/login?message=Could not authenticate user");

@@ -1,30 +1,36 @@
 "use client";
 
-import { registerUser } from "@/app/actions";
+import { registerUserAction } from "@/app/actions";
+import { RegisterUser } from "@/app/entities/supabase/register-user";
+import Link from "next/link";
+import { FC, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
-export interface Inputs {
-  firstName: string;
-  surname: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-// const test = async (data: Inputs) => {
-//   console.log("here123");
-//   await registerUser(data);
-// };
-
-const RegistrationForm = () => {
+const RegistrationForm: FC = () => {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors, isValid, isDirty },
-  } = useForm<Inputs>({ mode: "onBlur" });
+  } = useForm<RegisterUser>({ mode: "onBlur" });
+  const [apiError, setApiError] = useState<{
+    error: string;
+    success: string;
+  }>();
 
-  const onSubmit: SubmitHandler<Inputs> = (data: Inputs) => registerUser(data);
+  const onSubmit: SubmitHandler<RegisterUser> = async (data: RegisterUser) => {
+    const response = await registerUserAction(data);
+    const responseData = JSON.parse(response);
+    if (responseData.error)
+      return setApiError({
+        error: `An error occurred while registering your user ${responseData.error}.`,
+        success: "",
+      });
+    setApiError({
+      error: "",
+      success: "Please check your email to complete the sign in process.",
+    });
+  };
 
   return (
     <div className="flex flex-col gap-32 items-center m-4">
@@ -96,10 +102,28 @@ const RegistrationForm = () => {
         )}
         <button
           disabled={!isDirty || !isValid}
-          className="bg-green-700 rounded-md px-4 py-2 text-foreground mt-6 disabled:bg-slate-700"
+          type="submit"
+          className="bg-green-700 mb-2 rounded-md px-4 py-2 text-foreground mt-6 disabled:bg-slate-700"
         >
           Register
         </button>
+        {apiError?.error && (
+          <p className="text-base text-red-500">{apiError.error}</p>
+        )}
+        {apiError?.success && (
+          <p className="text-base text-green-500">{apiError.success}</p>
+        )}
+        {/* {searchParams?.message && (
+          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+            {searchParams.message}
+          </p>
+        )} */}
+        <p className="text-sm">
+          Already have an account?{" "}
+          <Link className="text-red-500" href={"/login"}>
+            Sign in
+          </Link>
+        </p>
       </form>
     </div>
   );
