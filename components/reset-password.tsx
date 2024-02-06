@@ -1,8 +1,6 @@
 "use client";
 
 import { resetUserPassword } from "@/app/actions";
-import { resetPassword } from "@/utils/supabase/userHelper";
-import { useRouter } from "next/navigation";
 import { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
@@ -25,7 +23,6 @@ const ResetPassword: FC = () => {
   const onSubmit: SubmitHandler<ResetPassword> = async (
     data: ResetPassword
   ) => {
-    console.log("data", data);
     const response = await resetUserPassword({ email: data.email });
     const responseData = JSON.parse(response);
     if (responseData.error)
@@ -42,7 +39,6 @@ const ResetPassword: FC = () => {
   return (
     <div className="flex flex-col gap-32 items-center m-4">
       <div className="mt-4 font-bold text-4xl">Password Reset</div>
-      <button onClick={() => router.push("/")}>Test</button>
       <form
         className="animate-in flex-1 flex flex-col w-full md:max-w-lg justify-center gap-2 text-foreground"
         onSubmit={handleSubmit(onSubmit)}
