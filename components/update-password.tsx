@@ -23,7 +23,7 @@ const UpdatePassword: FC = () => {
     error: string;
     success: string;
   }>();
-  const { push } = useRouter();
+  const router = useRouter();
   const searchParams = useSearchParams();
 
   const onSubmit: SubmitHandler<UpdatePassword> = async (
@@ -39,7 +39,7 @@ const UpdatePassword: FC = () => {
         error: `An error occurred while resetting your password.`,
         success: "",
       });
-    } else push("/");
+    } else router.push("/");
 
     // return redirect("/");
     // setApiError({
