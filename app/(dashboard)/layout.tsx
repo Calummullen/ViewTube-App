@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { Nav } from "@/components/nav";
 import { getUser } from "@/utils/supabase/userHelper";
 import { redirect } from "next/navigation";
@@ -19,9 +20,8 @@ const DashboardLayout: FC<Props> = async ({ children }) => {
       <Nav user={user}>
         <Suspense fallback={<div>Loading...</div>}></Suspense>
       </Nav>
-      <div className="min-h-screen dark:bg-black sm:ml-80 flex flex-col">
-        <div className="sm:hidden flex">{/* <Heading /> */}</div>
-        <div className="p-4">{children}</div>
+      <div className="min-h-screen dark:bg-black md:ml-80 flex flex-col">
+        <div className="p-4 mt-12 md:mt-0 ">{children}</div>
       </div>
     </div>
   );

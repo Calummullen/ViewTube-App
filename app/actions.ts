@@ -5,6 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { RegisterUser } from "./entities/supabase/register-user";
 import { redirect } from "next/navigation";
 import { useSearchParams } from "next/navigation";
+import { AuthError } from "@supabase/supabase-js";
 
 const createSBClient = () => {
   const cookieStore = cookies();
@@ -17,14 +18,14 @@ export const updateUserPassword = async (
 ) => {
   const createClient = createSBClient();
   await createClient.auth.exchangeCodeForSession(authCode);
-  const response = await createClient.auth.updateUser(
-    { password },
-    {
-      emailRedirectTo: "/",
-    }
-  );
-  console.log("error", response);
-  return JSON.stringify(response);
+  const response = await createClient.auth.updateUser({ password });
+  if (response.error) {
+    return JSON.stringify(response);
+  }
+
+  redirect("/");
+  // console.log("error", response);
+  // return JSON.stringify(response);
 };
 
 export const resetUserPassword = async (formData: { email: string }) => {

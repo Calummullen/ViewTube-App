@@ -30,10 +30,10 @@ const UpdatePassword: FC = () => {
 
     const sessionCode = searchParams.get("code");
     const response = await updateUserPassword(sessionCode ?? "", data.password);
-    const responseData = JSON.parse(response);
-    if (responseData.error) {
+    if (response) {
+      const responseData = JSON.parse(response);
       return setApiError({
-        error: `An error occurred while resetting your password.`,
+        error: `An error occurred while resetting your password. ${responseData}`,
         success: "",
       });
     }

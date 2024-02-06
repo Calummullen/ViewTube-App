@@ -81,7 +81,7 @@ export const Nav: FC<Props> = ({ user, children }) => {
   return (
     <>
       <button
-        className={`fixed z-20 right-5 top-3 sm:hidden`}
+        className={`fixed z-20 right-5 top-3 md:hidden`}
         onClick={() => setShowSidebar(!showSidebar)}
       >
         <Menu width={20} />
@@ -89,7 +89,7 @@ export const Nav: FC<Props> = ({ user, children }) => {
       <div
         className={`transform ${
           showSidebar ? "w-[75%] translate-x-0" : "-translate-x-full"
-        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 transition-all dark:border-stone-700 dark:bg-stone-900 sm:w-80 sm:translate-x-0`}
+        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 transition-all dark:border-stone-700 dark:bg-stone-900 md:w-80 md:translate-x-0`}
       >
         <div className="flex flex-col h-full">
           {/* <Heading /> */}
@@ -108,14 +108,14 @@ export const Nav: FC<Props> = ({ user, children }) => {
             </Link>
           ))}
         </div>
-        <div className="m-2">
+        {/* <div className="m-2">
           <button
             onClick={async () => logout()}
             className="rounded-md bg-red-500 text-white text-lg p-4 w-full"
           >
             Logout
           </button>
-        </div>
+        </div> */}
         {/* <div>
           <div className="grid gap-1">
             {externalLinks.map(({ name, href, icon }) => (
