@@ -19,8 +19,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
-      <body className="bg-black text-foreground">
+    <html lang="en" data-theme="light">
+      {/* <body className="bg-black text-foreground"> */}
+      <body>
         <main>
           {children}
           <Analytics />

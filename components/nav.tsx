@@ -87,9 +87,9 @@ export const Nav: FC<Props> = ({ user, children }) => {
         <Menu width={20} />
       </button>
       <div
-        className={`transform ${
+        className={`transform bg-base-100 ${
           showSidebar ? "w-[75%] translate-x-0" : "-translate-x-full"
-        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 transition-all dark:border-stone-700 dark:bg-stone-900 md:w-80 md:translate-x-0`}
+        } fixed z-10 flex h-full flex-col justify-between border-r transition-all  md:w-80 md:translate-x-0`}
       >
         <div className="flex flex-col h-full">
           {/* <Heading /> */}
@@ -100,9 +100,10 @@ export const Nav: FC<Props> = ({ user, children }) => {
               key={name}
               href={href}
               className={`flex items-center gap-4 py-4 px-6 ${
-                isActive ? "bg-stone-200 text-black dark:bg-stone-700 " : ""
-              } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:text-white dark:hover:bg-stone-700 dark:active:bg-stone-800`}
+                isActive ? "bg-stone-200 dark:bg-stone-700" : ""
+              } last:mt-auto transition-all duration-150 ease-in-out`}
             >
+              {/*               } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:hover:bg-stone-700 dark:active:bg-stone-800`} */}
               {icon}
               <span className="text-lg font-medium">{name}</span>
             </Link>

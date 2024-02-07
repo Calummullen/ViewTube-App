@@ -1,10 +1,20 @@
 "use client";
 
+import { Themes } from "@/app/entities/settings/themes.types";
 import { logout } from "@/utils/supabase/userHelper";
-import { FC, ReactNode } from "react";
-import cn from "classnames";
+import { FC, ReactNode, useEffect, useState } from "react";
 
 const Settings: FC = () => {
+  const [theme, setTheme] = useState("light");
+  const toggleTheme = (inputTheme: string) => {
+    setTheme(theme === inputTheme ? "light" : inputTheme);
+    document.querySelector("html")?.setAttribute("data-theme", inputTheme);
+  };
+
+  useEffect(() => {
+    document.querySelector("html")?.setAttribute("data-theme", theme);
+  }, [theme]);
+
   return (
     <div className="flex flex-col md:my-4 md:gap-16 gap-8 lg:mx-16 animate-in">
       <div className="text-4xl">Account Settings</div>
@@ -45,10 +55,90 @@ const Settings: FC = () => {
             title: "Delete account",
             description:
               "Permanently remove your ViewTube account. This action is not reversible, so please continue with caution.",
-            buttonText: "Permanently delete account",
+            buttonText: "Delete account",
           }}
           buttonType="error"
           clickHandler={async () => {}}
+        />
+        <SettingsSection
+          content={{
+            title: "Toggle Theme",
+            description: "Toggle between Light and Dark themes.",
+
+            buttonText: "",
+          }}
+          buttonType="toggle"
+          alternativeButton={
+            <label className="flex cursor-pointer gap-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="5" />
+                <path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+              </svg>
+              <input
+                type="checkbox"
+                value="halloween"
+                // checked={theme === "halloween"}
+                className="toggle"
+                onClick={(e) =>
+                  toggleTheme((e.target as any).checked ? "halloween" : "light")
+                }
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+              </svg>
+            </label>
+          }
+          clickHandler={async () => {}}
+        />
+        <SettingsSection
+          content={{
+            title: "Additional Themes",
+            description:
+              "Select from a range of additional themes. Please note, the 'Toggle Theme' button will not factor in the newly selected theme.",
+            buttonText: "",
+          }}
+          buttonType="toggle"
+          alternativeButton={
+            <details className="dropdown">
+              <summary className="w-full btn btn-info min-w-[200px]">
+                Select theme
+              </summary>
+              <ul className="shadow dropdown-content z-[1] cursor-pointer">
+                {Themes.map((theme) => (
+                  <li
+                    key={theme}
+                    value={theme}
+                    data-theme={theme}
+                    className="first-letter:capitalize px-6 py-3 shadow-lg"
+                    onClick={() => toggleTheme(theme)}
+                  >
+                    {theme}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          }
+          clickHandler={async () => logout()}
         />
       </div>
     </div>
@@ -61,7 +151,8 @@ interface SettingsScreenProps {
     description: string;
     buttonText: string;
   };
-  buttonType: "error" | "success" | "warning" | "info";
+  buttonType: "error" | "success" | "warning" | "info" | "toggle";
+  alternativeButton?: JSX.Element;
   clickHandler: () => void;
   children?: ReactNode;
 }
@@ -71,25 +162,35 @@ const SettingsSection: FC<SettingsScreenProps> = ({
   clickHandler,
   buttonType,
   children,
+  alternativeButton,
 }) => {
   const buttonColour = ButtonColour[buttonType];
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row justify-between border rounded-lg border-stone-700 p-4 lg:items-center">
-      <div className="flex flex-col gap-4]">
-        <h3 className="text-xl">{content.title}</h3>
-        <p className="text-stone-400">{content.description}</p>
-      </div>
-      <div>
-        {/* <button
+    <div>
+      <div className="flex flex-col gap-4 lg:flex-row justify-between border rounded-lg border-stone-700 p-4 lg:items-center">
+        <div className="flex flex-col gap-4">
+          <h3 className="text-xl">{content.title}</h3>
+          <p className="">{content.description}</p>
+        </div>
+        <div>
+          {/* <button
         className={`rounded-lg min-w-[200px] border-t ${ButtonColour[buttonType]} text-white text-lg p-4 w-full`}
         onClick={clickHandler}
       >
         {content.buttonText}
       </button> */}
-        <button onClick={clickHandler} className={`w-full btn ${buttonColour}`}>
-          {content.buttonText}
-        </button>
+          {alternativeButton ? (
+            alternativeButton
+          ) : (
+            <button
+              onClick={clickHandler}
+              className={`w-full btn min-w-[200px] ${buttonColour}`}
+            >
+              {content.buttonText}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
