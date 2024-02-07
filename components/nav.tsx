@@ -100,7 +100,7 @@ export const Nav: FC<Props> = ({ user, children }) => {
               key={name}
               href={href}
               className={`flex items-center gap-4 py-4 px-6 ${
-                isActive ? "bg-stone-200 dark:bg-stone-700" : ""
+                isActive ? "bg-base-300" : ""
               } last:mt-auto transition-all duration-150 ease-in-out`}
             >
               {/*               } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:hover:bg-stone-700 dark:active:bg-stone-800`} */}

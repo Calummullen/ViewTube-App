@@ -5,14 +5,16 @@ import { logout } from "@/utils/supabase/userHelper";
 import { FC, ReactNode, useEffect, useState } from "react";
 
 const Settings: FC = () => {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useState(
+    document.querySelector("html")?.getAttribute("data-theme")
+  );
   const toggleTheme = (inputTheme: string) => {
     setTheme(theme === inputTheme ? "light" : inputTheme);
     document.querySelector("html")?.setAttribute("data-theme", inputTheme);
   };
 
   useEffect(() => {
-    document.querySelector("html")?.setAttribute("data-theme", theme);
+    document.querySelector("html")?.setAttribute("data-theme", theme!);
   }, [theme]);
 
   return (
@@ -87,7 +89,7 @@ const Settings: FC = () => {
               <input
                 type="checkbox"
                 value="halloween"
-                // checked={theme === "halloween"}
+                checked={theme === "halloween"}
                 className="toggle"
                 onClick={(e) =>
                   toggleTheme((e.target as any).checked ? "halloween" : "light")
