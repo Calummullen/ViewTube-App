@@ -16,7 +16,7 @@ module.exports = {
   //     },
   //   },
   // },
-  plugins: [require("daisyui"), require('tailwindcss-animated')],
+  plugins: [require("daisyui"), require("tailwindcss-animated")],
   daisyui: {
     base: true,
     themes: [
@@ -53,5 +53,5 @@ module.exports = {
       "nord",
       "sunset",
     ],
-  }
+  },
 };

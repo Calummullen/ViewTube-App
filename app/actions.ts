@@ -73,7 +73,7 @@ export const updateProfileAvatar = async (id: string, filePath: string) => {
 
 export const updateUserPassword = async (
   authCode: string,
-  password: string
+  password: string,
 ) => {
   const createClient = createSBClient();
   await createClient.auth.exchangeCodeForSession(authCode);
@@ -93,13 +93,13 @@ export const resetUserPassword = async (formData: { email: string }) => {
     formData.email,
     {
       redirectTo: `http://localhost:3000/update-password`,
-    }
+    },
   );
   return JSON.stringify(response);
 };
 
 export const registerUserAction = async (
-  formData: RegisterUser
+  formData: RegisterUser,
 ): Promise<string> => {
   const origin = headers().get("origin");
   const createClient = createSBClient();

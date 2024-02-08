@@ -23,7 +23,7 @@ export class BaseService {
 
   async makeRequest<R = Record<string, unknown>>(
     url: string,
-    options?: RequestInit & { params?: Params }
+    options?: RequestInit & { params?: Params },
   ) {
     const response = await fetch(this.buildRequestUrl(url, options?.params), {
       headers: this.headers,

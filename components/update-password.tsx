@@ -24,7 +24,7 @@ const UpdatePassword: FC = () => {
   const searchParams = useSearchParams();
 
   const onSubmit: SubmitHandler<UpdatePassword> = async (
-    data: UpdatePassword
+    data: UpdatePassword,
   ) => {
     console.log("data", data);
 

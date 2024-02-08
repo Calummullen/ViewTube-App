@@ -21,7 +21,7 @@ const ResetPassword: FC = () => {
   }>();
 
   const onSubmit: SubmitHandler<ResetPassword> = async (
-    data: ResetPassword
+    data: ResetPassword,
   ) => {
     const response = await resetUserPassword({ email: data.email });
     const responseData = JSON.parse(response);
