@@ -2,14 +2,18 @@
 import React, { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import Image from "next/image";
+import { useApp } from "@/utils/context/app.context";
 
-export default function Avatar({ uid, url, size, onUpload }: any) {
+export default function Avatar({ uid, size, onUpload }: any) {
   const supabase = createClient();
-  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [uploading, setUploading] = useState(false);
 
+  const { avatar } = useApp();
+  console.log("pog", avatar);
+
   useEffect(() => {
-    async function downloadImage(path) {
+    async function downloadImage(path: string) {
       try {
         const { data, error } = await supabase.storage
           .from("avatars")
@@ -19,43 +23,44 @@ export default function Avatar({ uid, url, size, onUpload }: any) {
         }
 
         const url = URL.createObjectURL(data);
+        console.log("pog4", url);
         setAvatarUrl(url);
       } catch (error) {
         console.log("Error downloading image: ", error);
       }
     }
 
-    if (url) downloadImage(url);
-  }, [url, supabase]);
+    if (avatar) downloadImage(avatar);
+  }, [avatar, supabase]);
 
-  const uploadAvatar = async (event) => {
-    try {
-      setUploading(true);
+  // const uploadAvatar = async (event) => {
+  //   try {
+  //     setUploading(true);
 
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error("You must select an image to upload.");
-      }
+  //     if (!event.target.files || event.target.files.length === 0) {
+  //       throw new Error("You must select an image to upload.");
+  //     }
 
-      const file = event.target.files[0];
-      const fileExt = file.name.split(".").pop();
-      const filePath = `${uid}-${Math.random()}.${fileExt}`;
+  //     const file = event.target.files[0];
+  //     const fileExt = file.name.split(".").pop();
+  //     const filePath = `${uid}-${Math.random()}.${fileExt}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from("avatars")
-        .upload(filePath, file);
+  //     const { error: uploadError } = await supabase.storage
+  //       .from("avatars")
+  //       .upload(filePath, file);
 
-      if (uploadError) {
-        throw uploadError;
-      }
+  //     if (uploadError) {
+  //       throw uploadError;
+  //     }
 
-      onUpload(filePath);
-    } catch (error) {
-      alert("Error uploading avatar!");
-      console.log(error);
-    } finally {
-      setUploading(false);
-    }
-  };
+  //     onUpload(filePath);
+  //   } catch (error) {
+  //     alert("Error uploading avatar!");
+  //     console.log(error);
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
 
   return (
     <div>

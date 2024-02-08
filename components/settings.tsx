@@ -6,20 +6,20 @@ import { logout } from "@/utils/supabase/userHelper";
 import { FC, ReactNode, useEffect, useState, useContext } from "react";
 import { User } from "@supabase/gotrue-js/src/lib/types";
 import { createClient } from "@/utils/supabase/client";
-import { AppContext } from "@/utils/context/app.context";
+import { AppContext, useApp } from "@/utils/context/app.context";
 import { useRouter } from "next/navigation";
+import LoadingSpinner from "./loading-spinner";
+import cn from "classnames";
 
 interface Props {
   user: User;
 }
 
 const Settings: FC<Props> = ({ user }) => {
-  // const [user, setUser] = useState<User>(currentUser);
-  const { refresh } = useRouter();
-  const { theme, updateTheme } = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { theme, updateTheme, setAvatar } = useApp();
   const toggleTheme = (inputTheme: string) => {
     updateTheme(theme === inputTheme ? "light" : inputTheme);
-    // document.querySelector("html")?.setAttribute("data-theme", inputTheme);
   };
 
   useEffect(() => {
@@ -28,7 +28,15 @@ const Settings: FC<Props> = ({ user }) => {
   }, [theme]);
 
   return (
-    <div className="flex flex-col md:my-4 md:gap-16 gap-8 lg:mx-16 animate-in">
+    <div
+      className={cn(
+        "flex flex-col md:my-4 md:gap-16 gap-8 lg:mx-16 animate-in",
+        {
+          "opacity-25 pointer-events-none": isLoading,
+        }
+      )}
+    >
+      {isLoading && <LoadingSpinner />}
       <div className="text-4xl">Account Settings</div>
       <div className="flex flex-col gap-8">
         <SettingsSection
@@ -44,6 +52,7 @@ const Settings: FC<Props> = ({ user }) => {
               type="file"
               className="file-input file-input-bordered file-input-info w-full max-w-xs"
               onChange={async (e) => {
+                setIsLoading(true);
                 const files = e.target.files;
                 if (!files) {
                   return new Error("Invalid image selection.");
@@ -53,9 +62,10 @@ const Settings: FC<Props> = ({ user }) => {
                 const client = createClient();
 
                 await client.storage.from("avatars").upload(filePath, files[0]);
-                console.log(filePath, files[0]);
                 await updateProfileAvatar(user.id, filePath);
-                refresh();
+
+                setAvatar(filePath);
+                setIsLoading(false);
               }}
             />
           }
@@ -194,7 +204,6 @@ interface SettingsScreenProps {
   };
   buttonType: "error" | "success" | "warning" | "info" | "toggle";
   alternativeButton?: JSX.Element;
-  // clickHandler: () => void;
   clickHandler: any;
   children?: ReactNode;
 }
@@ -209,30 +218,28 @@ const SettingsSection: FC<SettingsScreenProps> = ({
   const buttonColour = ButtonColour[buttonType];
 
   return (
-    <div>
-      <div className="flex flex-col gap-4 lg:flex-row justify-between border rounded-lg border-stone-700 p-4 lg:items-center">
-        <div className="flex flex-col gap-4">
-          <h3 className="text-xl">{content.title}</h3>
-          <p className="">{content.description}</p>
-        </div>
-        <div>
-          {/* <button
+    <div className="flex flex-col gap-4 lg:flex-row justify-between border rounded-lg border-stone-700 p-4 lg:items-center">
+      <div className="flex flex-col gap-4">
+        <h3 className="text-xl">{content.title}</h3>
+        <p className="">{content.description}</p>
+      </div>
+      <div>
+        {/* <button
         className={`rounded-lg min-w-[200px] border-t ${ButtonColour[buttonType]} text-white text-lg p-4 w-full`}
         onClick={clickHandler}
       >
         {content.buttonText}
       </button> */}
-          {alternativeButton ? (
-            alternativeButton
-          ) : (
-            <button
-              onClick={clickHandler}
-              className={`w-full btn min-w-[200px] ${buttonColour}`}
-            >
-              {content.buttonText}
-            </button>
-          )}
-        </div>
+        {alternativeButton ? (
+          alternativeButton
+        ) : (
+          <button
+            onClick={clickHandler}
+            className={`w-full btn min-w-[200px] ${buttonColour}`}
+          >
+            {content.buttonText}
+          </button>
+        )}
       </div>
     </div>
   );

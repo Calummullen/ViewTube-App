@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { AppContext, AppContextProvider } from "@/utils/context/app.context";
 import { useContext } from "react";
+import { User } from "@supabase/supabase-js";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -21,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AppContextProvider>
+    <AppContextProvider avatar={""} user={{} as User}>
       <html lang="en">
         {/* <body className="bg-black text-foreground"> */}
         <body>

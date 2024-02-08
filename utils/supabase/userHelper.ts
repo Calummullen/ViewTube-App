@@ -11,6 +11,39 @@ export const createSBClient = () => {
   return createClient(cookieStore);
 };
 
+export const getUserAvatar = async (userId: string) => {
+  const supabaseClient = createSBClient();
+
+  const { data } = await supabaseClient
+    .from("profiles")
+    .select(`avatar_url`)
+    .eq("id", userId)
+    .single();
+
+  // const { data: downloadData, error: downloadError } =
+  //   await supabaseClient.storage.from("avatars").download(data?.avatar_url);
+  // if (downloadError) {
+  //   throw downloadError;
+  // }
+  // console.log(downloadData);
+
+  // const url = URL.createObjectURL(downloadData);
+  // console.log(url);
+
+  return data?.avatar_url;
+};
+
+export const test = async (path: string) => {
+  const supabaseClient = createSBClient();
+  const { data, error } = await supabaseClient.storage
+    .from("avatars")
+    .download(path);
+  if (error) {
+    throw error;
+  }
+  return data;
+};
+
 export const getUser = async () => {
   const supabaseClient = createSBClient();
   const {

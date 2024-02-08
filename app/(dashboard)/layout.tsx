@@ -1,8 +1,10 @@
+import LoadingSpinner from "@/components/loading-spinner";
 import { Nav } from "@/components/nav";
-import { AppContextProvider } from "@/utils/context/app.context";
-import { getUser } from "@/utils/supabase/userHelper";
+import { AppContextProvider, CustomBlob } from "@/utils/context/app.context";
+import { getUser, getUserAvatar, test } from "@/utils/supabase/userHelper";
 import { redirect } from "next/navigation";
-import { FC, ReactNode, Suspense, useContext } from "react";
+import { FC, ReactNode, Suspense } from "react";
+import Loading from "./loading";
 
 interface Props {
   children: ReactNode;
@@ -14,17 +16,22 @@ const DashboardLayout: FC<Props> = async ({ children }) => {
   if (!user) {
     redirect("/login");
   }
-  console.log("rerender");
+
+  const avatar = await getUserAvatar(user.id);
 
   return (
-    <AppContextProvider>
+    <AppContextProvider avatar={avatar} user={user}>
       <div>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Nav user={user} />
+        <Nav />
+        <Suspense fallback={<Loading />}>
+          <div className="min-h-screen md:ml-80 flex flex-col">
+            <div className="p-4 mt-12 md:mt-0 ">{children}</div>
+          </div>
         </Suspense>
-        <div className="min-h-screen md:ml-80 flex flex-col">
+
+        {/* <div className="min-h-screen md:ml-80 flex flex-col">
           <div className="p-4 mt-12 md:mt-0 ">{children}</div>
-        </div>
+        </div> */}
       </div>
     </AppContextProvider>
   );
