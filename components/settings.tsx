@@ -7,12 +7,15 @@ import { FC, ReactNode, useEffect, useState, useContext } from "react";
 import { User } from "@supabase/gotrue-js/src/lib/types";
 import { createClient } from "@/utils/supabase/client";
 import { AppContext } from "@/utils/context/app.context";
+import { useRouter } from "next/navigation";
 
 interface Props {
   user: User;
 }
 
 const Settings: FC<Props> = ({ user }) => {
+  // const [user, setUser] = useState<User>(currentUser);
+  const { refresh } = useRouter();
   const { theme, updateTheme } = useContext(AppContext);
   const toggleTheme = (inputTheme: string) => {
     updateTheme(theme === inputTheme ? "light" : inputTheme);
@@ -49,12 +52,10 @@ const Settings: FC<Props> = ({ user }) => {
                 const filePath = `${user.id}-${Math.random()}.${fileExt}`;
                 const client = createClient();
 
-                const { data: uploadData, error: uploadError } =
-                  await client.storage
-                    .from("avatars")
-                    .upload(filePath, files[0]);
-
+                await client.storage.from("avatars").upload(filePath, files[0]);
+                console.log(filePath, files[0]);
                 await updateProfileAvatar(user.id, filePath);
+                refresh();
               }}
             />
           }
@@ -88,7 +89,7 @@ const Settings: FC<Props> = ({ user }) => {
             buttonText: "Logout",
           }}
           buttonType="warning"
-          clickHandler={async () => logout()}
+          clickHandler={async () => await logout()}
         />
         <SettingsSection
           content={{

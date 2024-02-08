@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, FC, useState } from "react";
+import { User } from "@supabase/supabase-js";
+import { getUser } from "../supabase/userHelper";
 
 type Context = {
   theme: string;

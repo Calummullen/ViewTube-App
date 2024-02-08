@@ -29,7 +29,6 @@ import { updateProfileAvatar } from "@/app/actions";
 
 interface Props {
   user: User;
-  children: ReactNode;
 }
 
 const externalLinks = [
@@ -50,7 +49,7 @@ const externalLinks = [
   },
 ];
 
-export const Nav: FC<Props> = ({ user, children }) => {
+export const Nav: FC<Props> = ({ user }) => {
   const segments = useSelectedLayoutSegments();
   const { id } = useParams() as { id?: string };
   const [avatar_url, setAvatarUrl] = useState(null);
@@ -89,13 +88,12 @@ export const Nav: FC<Props> = ({ user, children }) => {
     setShowSidebar(false);
   }, [pathname]);
 
-  const supabase = createClient();
-
+  const client = createClient();
   const getProfile = useCallback(async () => {
     try {
       // setLoading(true)
 
-      const { data, error, status } = await supabase
+      const { data, error, status } = await client
         .from("profiles")
         .select(`avatar_url`)
         .eq("id", user?.id)
@@ -113,7 +111,7 @@ export const Nav: FC<Props> = ({ user, children }) => {
     } finally {
       // setLoading(false)
     }
-  }, [user, supabase]);
+  }, [user, client]);
 
   useEffect(() => {
     getProfile();
@@ -144,16 +142,14 @@ export const Nav: FC<Props> = ({ user, children }) => {
               uid={user.id}
               url={avatar_url}
               size={40}
-              onUpload={async (url) => {
-                setAvatarUrl(url);
-                console.log(user.id);
-                const test = await supabase.from("profiles").select();
-                console.log(test);
-                const { data, error } = await supabase
-                  .from("profiles")
-                  .upsert({ id: user.id, avatar_url: url });
-                console.log("error ahhhh", error, data);
-              }}
+              // onUpload={async (url) => {
+              //   setAvatarUrl(url);
+              //   console.log("updating avatar mofuckers");
+              //   const { data, error } = await supabase
+              //     .from("profiles")
+              //     .upsert({ id: user.id, avatar_url: url });
+              //   console.log("error ahhhh", error, data);
+              // }}
             />
             <div>
               <p className="font-bold text-lg p-4 break-all text-center">{`${user.user_metadata.firstName} ${user.user_metadata.surname}`}</p>
