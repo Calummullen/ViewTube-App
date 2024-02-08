@@ -1,5 +1,6 @@
 import Footer from "@/components/footer";
 import { Nav } from "@/components/nav";
+import { AppContextProvider } from "@/utils/context/app.context";
 import { getUser } from "@/utils/supabase/userHelper";
 import { redirect } from "next/navigation";
 import { FC, ReactNode, Suspense } from "react";
@@ -16,14 +17,16 @@ const DashboardLayout: FC<Props> = async ({ children }) => {
   }
 
   return (
-    <div>
-      <Nav user={user}>
-        <Suspense fallback={<div>Loading...</div>}></Suspense>
-      </Nav>
-      <div className="min-h-screen md:ml-80 flex flex-col">
-        <div className="p-4 mt-12 md:mt-0 ">{children}</div>
+    <AppContextProvider>
+      <div>
+        <Nav user={user}>
+          <Suspense fallback={<div>Loading...</div>}></Suspense>
+        </Nav>
+        <div className="min-h-screen md:ml-80 flex flex-col">
+          <div className="p-4 mt-12 md:mt-0 ">{children}</div>
+        </div>
       </div>
-    </div>
+    </AppContextProvider>
   );
 };
 

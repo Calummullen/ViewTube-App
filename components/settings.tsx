@@ -1,26 +1,64 @@
 "use client";
 
+import { updateProfileAvatar } from "@/app/actions";
 import { Themes } from "@/app/entities/settings/themes.types";
 import { logout } from "@/utils/supabase/userHelper";
-import { FC, ReactNode, useEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useState, useContext } from "react";
+import { User } from "@supabase/gotrue-js/src/lib/types";
+import { createClient } from "@/utils/supabase/client";
+import { AppContext } from "@/utils/context/app.context";
 
-const Settings: FC = () => {
-  const [theme, setTheme] = useState(
-    document.querySelector("html")?.getAttribute("data-theme")
-  );
+interface Props {
+  user: User;
+}
+
+const Settings: FC<Props> = ({ user }) => {
+  const { theme, updateTheme } = useContext(AppContext);
   const toggleTheme = (inputTheme: string) => {
-    setTheme(theme === inputTheme ? "light" : inputTheme);
-    document.querySelector("html")?.setAttribute("data-theme", inputTheme);
+    updateTheme(theme === inputTheme ? "light" : inputTheme);
+    // document.querySelector("html")?.setAttribute("data-theme", inputTheme);
   };
 
   useEffect(() => {
-    document.querySelector("html")?.setAttribute("data-theme", theme!);
+    document.querySelector("html")?.setAttribute("data-theme", theme);
+    updateTheme(theme);
   }, [theme]);
 
   return (
     <div className="flex flex-col md:my-4 md:gap-16 gap-8 lg:mx-16 animate-in">
       <div className="text-4xl">Account Settings</div>
       <div className="flex flex-col gap-8">
+        <SettingsSection
+          content={{
+            title: "Update profile picture",
+            description: "Add or update a new profile photo.",
+            buttonText: "",
+          }}
+          buttonType="toggle"
+          clickHandler={() => {}}
+          alternativeButton={
+            <input
+              type="file"
+              className="file-input file-input-bordered file-input-info w-full max-w-xs"
+              onChange={async (e) => {
+                const files = e.target.files;
+                if (!files) {
+                  return new Error("Invalid image selection.");
+                }
+                const fileExt = files[0].name.split(".").pop();
+                const filePath = `${user.id}-${Math.random()}.${fileExt}`;
+                const client = createClient();
+
+                const { data: uploadData, error: uploadError } =
+                  await client.storage
+                    .from("avatars")
+                    .upload(filePath, files[0]);
+
+                await updateProfileAvatar(user.id, filePath);
+              }}
+            />
+          }
+        />
         <SettingsSection
           content={{
             title: "Other",
@@ -89,7 +127,7 @@ const Settings: FC = () => {
               <input
                 type="checkbox"
                 value="halloween"
-                checked={theme === "halloween"}
+                defaultChecked={theme === "halloween"}
                 className="toggle"
                 onClick={(e) =>
                   toggleTheme((e.target as any).checked ? "halloween" : "light")
@@ -155,7 +193,8 @@ interface SettingsScreenProps {
   };
   buttonType: "error" | "success" | "warning" | "info" | "toggle";
   alternativeButton?: JSX.Element;
-  clickHandler: () => void;
+  // clickHandler: () => void;
+  clickHandler: any;
   children?: ReactNode;
 }
 

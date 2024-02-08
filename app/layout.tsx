@@ -2,6 +2,8 @@ import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
+import { AppContext, AppContextProvider } from "@/utils/context/app.context";
+import { useContext } from "react";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,15 +21,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" data-theme="light">
-      {/* <body className="bg-black text-foreground"> */}
-      <body>
-        <main>
-          {children}
-          <Analytics />
-          <SpeedInsights />
-        </main>
-      </body>
-    </html>
+    <AppContextProvider>
+      <html lang="en">
+        {/* <body className="bg-black text-foreground"> */}
+        <body>
+          <main>
+            {children}
+            <Analytics />
+            <SpeedInsights />
+          </main>
+        </body>
+      </html>
+    </AppContextProvider>
   );
 }

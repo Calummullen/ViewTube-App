@@ -13,9 +13,19 @@ import {
   usePathname,
   useSelectedLayoutSegments,
 } from "next/navigation";
-import { FC, ReactNode, useEffect, useMemo, useState } from "react";
+import {
+  FC,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useCallback,
+  useState,
+} from "react";
 import { User } from "@supabase/supabase-js";
 import { logout } from "@/utils/supabase/userHelper";
+import Avatar from "./avatar";
+import { createClient } from "@/utils/supabase/client";
+import { updateProfileAvatar } from "@/app/actions";
 
 interface Props {
   user: User;
@@ -43,6 +53,7 @@ const externalLinks = [
 export const Nav: FC<Props> = ({ user, children }) => {
   const segments = useSelectedLayoutSegments();
   const { id } = useParams() as { id?: string };
+  const [avatar_url, setAvatarUrl] = useState(null);
 
   const [siteId, setSiteId] = useState<string | null>();
 
@@ -78,6 +89,36 @@ export const Nav: FC<Props> = ({ user, children }) => {
     setShowSidebar(false);
   }, [pathname]);
 
+  const supabase = createClient();
+
+  const getProfile = useCallback(async () => {
+    try {
+      // setLoading(true)
+
+      const { data, error, status } = await supabase
+        .from("profiles")
+        .select(`avatar_url`)
+        .eq("id", user?.id)
+        .single();
+
+      if (error && status !== 406) {
+        throw error;
+      }
+
+      if (data) {
+        setAvatarUrl(data.avatar_url);
+      }
+    } catch (error) {
+      alert("Error loading user data!");
+    } finally {
+      // setLoading(false)
+    }
+  }, [user, supabase]);
+
+  useEffect(() => {
+    getProfile();
+  }, [user, getProfile]);
+
   return (
     <>
       <button
@@ -93,7 +134,31 @@ export const Nav: FC<Props> = ({ user, children }) => {
       >
         <div className="flex flex-col h-full">
           {/* <Heading /> */}
-          <p className="font-bold text-lg p-4 break-all">{`${user.user_metadata.firstName} ${user.user_metadata.surname}`}</p>
+          <div className="flex flex-row m-4 items-center">
+            {/* <div className="avatar">
+              <div className="w-16 h-16 rounded-full">
+                <img src="https://daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg" />
+              </div>
+            </div> */}
+            <Avatar
+              uid={user.id}
+              url={avatar_url}
+              size={40}
+              onUpload={async (url) => {
+                setAvatarUrl(url);
+                console.log(user.id);
+                const test = await supabase.from("profiles").select();
+                console.log(test);
+                const { data, error } = await supabase
+                  .from("profiles")
+                  .upsert({ id: user.id, avatar_url: url });
+                console.log("error ahhhh", error, data);
+              }}
+            />
+            <div>
+              <p className="font-bold text-lg p-4 break-all text-center">{`${user.user_metadata.firstName} ${user.user_metadata.surname}`}</p>
+            </div>
+          </div>
 
           {tabs.map(({ name, href, isActive, icon }) => (
             <Link

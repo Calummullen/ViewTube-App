@@ -12,6 +12,65 @@ const createSBClient = () => {
   return createClient(cookieStore);
 };
 
+// export const uploadAvatar = async (event: any) => {
+//   const createClient = createSBClient();
+
+//   if (!event.target.files || event.target.files.length === 0) {
+//     throw new Error("You must select an image to upload.");
+//   }
+
+//   const file = event.target.files[0];
+//   const fileExt = file.name.split(".").pop();
+//   const fileName = `${Math.random()}.${fileExt}`;
+//   const filePath = `${fileName}`;
+
+//   const { error: uploadError } = await createClient.storage
+//     .from("avatars")
+//     .upload(filePath, file);
+//   // error handling
+//   const { error } = await createClient
+//     .from("profiles")
+//     .upsert({ avatar_url: filePath });
+//   // error handling
+// };
+
+export const getUserAvatar = async (path: string): Promise<string> => {
+  const createClient = createSBClient();
+  const { data, error } = await createClient.storage
+    .from("avatars")
+    .download(path);
+  if (error) {
+    throw error;
+  }
+
+  return URL.createObjectURL(data);
+};
+
+// TODO: get event.target.files type
+export const updateProfileAvatar = async (id: string, filePath: string) => {
+  const createClient = createSBClient();
+
+  // if (!event.target.files || event.target.files.length === 0) {
+  //   throw new Error("You must select an image to upload.");
+  // }
+
+  // const file = event.target.files[0];
+  // const fileExt = file.name.split(".").pop();
+  // const filePath = `${id}-${Math.random()}.${fileExt}`;
+
+  // const { data: uploadData, error: uploadError } = await createClient.storage
+  //   .from("avatars")
+  //   .upload(filePath, file);
+  //   console.log('upload', uploadData, uploadError);
+
+  // maybe move this out?
+
+  const { data, error } = await createClient
+    .from("profiles")
+    .upsert({ id, avatar_url: filePath });
+  console.log("response", data, error);
+};
+
 export const updateUserPassword = async (
   authCode: string,
   password: string
