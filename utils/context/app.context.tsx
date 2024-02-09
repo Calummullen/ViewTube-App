@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  FC,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
-import { createClient } from "@/utils/supabase/client";
+import { createContext, FC, useContext, useState, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 
 export interface CustomBlob {
@@ -32,16 +24,23 @@ export const AppContextProvider: FC<{
   avatar: string;
   user: User;
 }> = ({ children, avatar: userAvatar, user: userData }) => {
-  const [theme, setTheme] = useState(
-    localStorage.getItem("data-theme") || "light"
-  );
+  const [theme, setTheme] = useState<string>("");
+  console.log("ahhhhhhh", theme);
+
   const [avatar, setAvatar] = useState<string>(userAvatar);
   const [user, setUser] = useState<User>(userData);
 
   const updateTheme = (theme: string) => {
     setTheme(theme);
+    console.log("hhere123");
     localStorage.setItem("data-theme", theme);
   };
+
+  // useEffect(() => {
+  //   const test = localStorage.getItem("data-theme");
+  //   console.log("hwerwe123", test);
+  //   setTheme(localStorage.getItem("data-theme") || "light");
+  // }, []);
 
   return (
     <AppContext.Provider

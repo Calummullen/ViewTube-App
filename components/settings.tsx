@@ -10,6 +10,7 @@ import { AppContext, useApp } from "@/utils/context/app.context";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "./loading-spinner";
 import cn from "classnames";
+import Generate from "./OpenAI/generate-text";
 
 interface Props {
   user: User;
@@ -23,6 +24,7 @@ const Settings: FC<Props> = ({ user }) => {
   };
 
   useEffect(() => {
+    if (!theme) return;
     document.querySelector("html")?.setAttribute("data-theme", theme);
     updateTheme(theme);
   }, [theme]);
@@ -137,11 +139,11 @@ const Settings: FC<Props> = ({ user }) => {
               </svg>
               <input
                 type="checkbox"
-                value="halloween"
-                defaultChecked={theme === "halloween"}
+                value="dark"
+                defaultChecked={theme === "dark"}
                 className="toggle"
                 onClick={(e) =>
-                  toggleTheme((e.target as any).checked ? "halloween" : "light")
+                  toggleTheme((e.target as any).checked ? "dark" : "light")
                 }
               />
               <svg

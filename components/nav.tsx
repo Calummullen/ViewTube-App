@@ -6,7 +6,7 @@ import {
   Menu,
   Settings,
   TrendingUp,
-  LogOut,
+  Lightbulb,
 } from "lucide-react";
 import {
   useParams,
@@ -61,6 +61,12 @@ export const Nav: FC = () => {
         href: "/",
         isActive: segments.length === 0,
         icon: <LayoutDashboard width={18} />,
+      },
+      {
+        name: "Brainstorm",
+        href: "/brainstorm",
+        isActive: segments[0] === "brainstorm",
+        icon: <Lightbulb width={18} />,
       },
       {
         name: "Trending",

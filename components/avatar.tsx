@@ -10,7 +10,6 @@ export default function Avatar({ uid, size, onUpload }: any) {
   const [uploading, setUploading] = useState(false);
 
   const { avatar } = useApp();
-  console.log("pog", avatar);
 
   useEffect(() => {
     async function downloadImage(path: string) {
@@ -23,7 +22,6 @@ export default function Avatar({ uid, size, onUpload }: any) {
         }
 
         const url = URL.createObjectURL(data);
-        console.log("pog4", url);
         setAvatarUrl(url);
       } catch (error) {
         console.log("Error downloading image: ", error);
