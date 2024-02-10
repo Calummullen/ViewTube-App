@@ -10,6 +10,7 @@ const openai = new OpenAI({
 export const ChatCompletion = async (
   prompt: string
 ): Promise<ChatCompletionResponse> => {
+  console.log("here");
   return await openai.chat.completions.create({
     messages: [{ role: "user", content: prompt }],
     model: "gpt-3.5-turbo-0125",
