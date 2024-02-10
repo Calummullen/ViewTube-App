@@ -10,7 +10,6 @@ import { AppContext, useApp } from "@/utils/context/app.context";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "./loading-spinner";
 import cn from "classnames";
-import Generate from "./OpenAI/generate-text";
 
 interface Props {
   user: User;
