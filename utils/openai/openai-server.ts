@@ -41,11 +41,20 @@ export const getChatResponses = async (userId: string) => {
 
 export const deleteChatResponses = async (userIds: string[]) => {
   const client = createSBClient();
-  const response = await client
-    .from("chat_response")
-    .delete({ count: "exact" })
-    .eq("id", userIds)
-    .select();
 
+  const response = await Promise.all(
+    userIds.map(
+      async (id) =>
+        await client
+          .from("chat_response")
+          .delete({ count: "exact" })
+          .eq("id", id)
+    )
+  );
+
+  //   const response = await client
+  //     .from("chat_response")
+  //     .delete({ count: "exact" })
+  //     .eq("id", userIds);
   return response;
 };

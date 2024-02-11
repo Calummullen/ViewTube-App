@@ -94,10 +94,10 @@ const Brainstorm: FC = () => {
   const deleteRows = async () => {
     if (rowsMarkedForDeletion.length === 0) return;
     console.log(rowsMarkedForDeletion);
-    const { error, count } = await deleteChatResponses(rowsMarkedForDeletion);
-    console.log("789", error);
-    if (!error) {
-      toast(`Deleted ${count} records.`, {
+    const response = await deleteChatResponses(rowsMarkedForDeletion);
+
+    if (!response.some((r) => r.error)) {
+      toast(`Deleted ${response.length} records.`, {
         type: "success",
       });
       await getResponseHistory();
@@ -175,7 +175,7 @@ const Brainstorm: FC = () => {
             </thead>
             <tbody>
               {responseHistory.map((item, index) => (
-                <tr key={item.prompt} className="">
+                <tr key={`${item.prompt}${index}`} className="">
                   <th>{index + 1}</th>
                   <td>{item.prompt}</td>
                   <td>{item.response}</td>
