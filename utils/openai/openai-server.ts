@@ -24,9 +24,10 @@ export const uploadChatResponse = async (
   response: string
 ) => {
   const client = createSBClient();
-  const { data, error } = await client
+  const apiResponse = await client
     .from("chat_response")
     .upsert({ user_id: userId, prompt, response });
+  return apiResponse;
 };
 
 export const getChatResponses = async (userId: string) => {
@@ -36,4 +37,15 @@ export const getChatResponses = async (userId: string) => {
     .select()
     .eq("user_id", userId);
   return data;
+};
+
+export const deleteChatResponses = async (userIds: string[]) => {
+  const client = createSBClient();
+  const response = await client
+    .from("chat_response")
+    .delete({ count: "exact" })
+    .eq("id", userIds)
+    .select();
+
+  return response;
 };

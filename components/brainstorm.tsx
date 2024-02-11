@@ -7,9 +7,12 @@ import {
   chatCompletion,
   uploadChatResponse,
   getChatResponses,
+  deleteChatResponses,
 } from "@/utils/openai/openai-server";
 import { useTypewriter, Typewriter } from "react-simple-typewriter";
 import { useApp } from "@/utils/context/app.context";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Input {
   prompt: string;
@@ -17,16 +20,21 @@ interface Input {
 
 interface ResponseHistory {
   createdAt: Date;
-  id?: string;
+  id: string;
   prompt: string;
   response: string;
   userId?: string;
+  markedForDeletion?: boolean;
 }
 
 const Brainstorm: FC = () => {
   const { user } = useApp();
   const [chatResponse, setChatResponse] = useState<string[]>([]);
   const [responseHistory, setResponseHistory] = useState<ResponseHistory[]>([]);
+  const [showDeleteColumn, setShowDeleteColumn] = useState<boolean>(false);
+  const [rowsMarkedForDeletion, setRowsMarkedForDeletion] = useState<string[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { register, handleSubmit, getValues } = useForm<Input>();
@@ -35,6 +43,7 @@ const Brainstorm: FC = () => {
     const test = await getChatResponses(user.id);
     const result = test?.map((key) => {
       return {
+        id: key.id,
         prompt: key.prompt,
         response: key.response,
         createdAt: key.created_at,
@@ -42,6 +51,8 @@ const Brainstorm: FC = () => {
     });
     if (result?.length) setResponseHistory(result);
   };
+
+  const notify = () => toast("Wow so easy!");
 
   useEffect(() => {
     // const getResponseHistory = async () => {
@@ -67,8 +78,31 @@ const Brainstorm: FC = () => {
 
   const onSaveResponse = async () => {
     const prompt = getValues("prompt");
-    await uploadChatResponse(user.id, prompt, chatResponse[0]);
-    await getResponseHistory();
+    const { data, error } = await uploadChatResponse(
+      user.id,
+      prompt,
+      chatResponse[0]
+    );
+    if (!error) {
+      toast(`Successfully added new response record.`, {
+        type: "success",
+      });
+      await getResponseHistory();
+    }
+  };
+
+  const deleteRows = async () => {
+    if (rowsMarkedForDeletion.length === 0) return;
+    console.log(rowsMarkedForDeletion);
+    const { error, count } = await deleteChatResponses(rowsMarkedForDeletion);
+    console.log("789", error);
+    if (!error) {
+      toast(`Deleted ${count} records.`, {
+        type: "success",
+      });
+      await getResponseHistory();
+      setRowsMarkedForDeletion([]);
+    }
   };
 
   return (
@@ -118,20 +152,54 @@ const Brainstorm: FC = () => {
           <table className="table">
             {/* head */}
             <thead>
-              <tr>
+              <tr className="">
                 <th></th>
                 <th>User Prompt</th>
                 <th>Response</th>
                 <th>Date Requested</th>
+
+                <th className="w-[175px]">
+                  <button
+                    disabled={rowsMarkedForDeletion.length === 0}
+                    className="btn btn-outline btn-error btn-sm w-full"
+                    onClick={deleteRows}
+                  >
+                    Delete {rowsMarkedForDeletion.length} row
+                    {rowsMarkedForDeletion.length > 1 ||
+                    rowsMarkedForDeletion.length === 0
+                      ? "s"
+                      : ""}
+                  </button>
+                </th>
               </tr>
             </thead>
             <tbody>
               {responseHistory.map((item, index) => (
-                <tr key={item.prompt}>
+                <tr key={item.prompt} className="">
                   <th>{index + 1}</th>
                   <td>{item.prompt}</td>
                   <td>{item.response}</td>
                   <td>{item.createdAt.toString()}</td>
+                  {!showDeleteColumn ? (
+                    <td className="flex-col justify-center items-center">
+                      <input
+                        type="checkbox"
+                        className="checkbox checkbox-error ml-14"
+                        onChange={(e) => {
+                          e.target.checked
+                            ? setRowsMarkedForDeletion([
+                                ...rowsMarkedForDeletion,
+                                item.id,
+                              ])
+                            : setRowsMarkedForDeletion((state) =>
+                                state.filter((i) => i !== item.id)
+                              );
+                        }}
+                      />
+                    </td>
+                  ) : (
+                    ""
+                  )}
                 </tr>
               ))}
               {/* row 2 */}
@@ -139,6 +207,7 @@ const Brainstorm: FC = () => {
           </table>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
