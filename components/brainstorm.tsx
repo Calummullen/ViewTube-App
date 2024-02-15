@@ -8,6 +8,7 @@ import {
   uploadChatResponse,
   getChatResponses,
   deleteChatResponses,
+  testImageGeneration,
 } from "@/utils/openai/openai-server";
 import { useTypewriter, Typewriter } from "react-simple-typewriter";
 import { useApp } from "@/utils/context/app.context";
@@ -15,7 +16,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface Input {
-  prompt: string;
+  prompt?: string;
+  imagePrompt?: string;
 }
 
 interface ResponseHistory {
@@ -32,12 +34,24 @@ const Brainstorm: FC = () => {
   const [chatResponse, setChatResponse] = useState<string[]>([]);
   const [responseHistory, setResponseHistory] = useState<ResponseHistory[]>([]);
   const [showDeleteColumn, setShowDeleteColumn] = useState<boolean>(false);
+  const [testImage, setImage] = useState<string>();
   const [rowsMarkedForDeletion, setRowsMarkedForDeletion] = useState<string[]>(
     []
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { register, handleSubmit, getValues } = useForm<Input>();
+
+  const testImageG = async (data: Input) => {
+    console.log("hi");
+    if (data.imagePrompt) {
+      setIsLoading(true);
+      const result = await testImageGeneration(data.imagePrompt);
+      const image = result.data[0].url;
+      setImage(image);
+      setIsLoading(false);
+    }
+  };
 
   const getResponseHistory = async () => {
     const test = await getChatResponses(user.id);
@@ -72,22 +86,27 @@ const Brainstorm: FC = () => {
 
   const onSubmit: SubmitHandler<Input> = async (data: Input) => {
     setChatResponse([]);
-    const promptResponse = await chatCompletion(data.prompt);
-    setChatResponse([promptResponse.choices[0].message.content || ""]);
+    if (data.prompt) {
+      const promptResponse = await chatCompletion(data.prompt);
+      setChatResponse([promptResponse.choices[0].message.content || ""]);
+    }
   };
 
   const onSaveResponse = async () => {
     const prompt = getValues("prompt");
-    const { data, error } = await uploadChatResponse(
-      user.id,
-      prompt,
-      chatResponse[0]
-    );
-    if (!error) {
-      toast(`Successfully added new response record.`, {
-        type: "success",
-      });
-      await getResponseHistory();
+    if (prompt) {
+      const { data, error } = await uploadChatResponse(
+        user.id,
+        prompt,
+        chatResponse[0]
+      );
+
+      if (!error) {
+        toast(`Successfully added new response record.`, {
+          type: "success",
+        });
+        await getResponseHistory();
+      }
     }
   };
 
@@ -107,6 +126,22 @@ const Brainstorm: FC = () => {
 
   return (
     <div className="md:my-4 lg:mx-16 animate-in flex flex-col gap-4">
+      <div>
+        <form onSubmit={handleSubmit(testImageG)}>
+          <label className="text-lg" htmlFor="imagePrompt">
+            Enter Image Idea
+          </label>
+          <div className="flex flex-row gap-4 items-center justify-between">
+            <input
+              type="text"
+              placeholder="Type here"
+              className="input input-bordered grow"
+              {...register("imagePrompt")}
+            />
+          </div>
+        </form>
+        {isLoading ? "Generating image" : testImage && <img src={testImage} />}
+      </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col gap-4 bg-base-300 border rounded-lg p-4 w-full"

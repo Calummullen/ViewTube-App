@@ -58,3 +58,12 @@ export const deleteChatResponses = async (userIds: string[]) => {
   //     .eq("id", userIds);
   return response;
 };
+
+export const testImageGeneration = async (prompt: string) => {
+  return await openai.images.generate({
+    model: "dall-e-3",
+    prompt,
+    size: "1024x1024",
+    quality: "standard",
+  });
+};
