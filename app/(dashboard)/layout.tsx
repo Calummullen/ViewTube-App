@@ -5,6 +5,7 @@ import { getUser, getUserAvatar, test } from "@/utils/supabase/userHelper";
 import { redirect } from "next/navigation";
 import { FC, ReactNode, Suspense } from "react";
 import Loading from "./loading";
+import AppLayout from "@/components/app-layout";
 
 interface Props {
   children: ReactNode;
@@ -21,18 +22,7 @@ const DashboardLayout: FC<Props> = async ({ children }) => {
 
   return (
     <AppContextProvider avatar={avatar} user={user}>
-      <div>
-        <Nav />
-        <Suspense fallback={<Loading />}>
-          <div className="min-h-screen md:ml-80 flex flex-col">
-            <div className="p-4 mt-12 md:mt-0 ">{children}</div>
-          </div>
-        </Suspense>
-
-        {/* <div className="min-h-screen md:ml-80 flex flex-col">
-          <div className="p-4 mt-12 md:mt-0 ">{children}</div>
-        </div> */}
-      </div>
+      <AppLayout>{children}</AppLayout>
     </AppContextProvider>
   );
 };

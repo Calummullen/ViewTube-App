@@ -21,6 +21,7 @@ import {
   useCallback,
   useState,
   useContext,
+  useRef,
 } from "react";
 import { User } from "@supabase/supabase-js";
 import { logout } from "@/utils/supabase/userHelper";
@@ -28,6 +29,7 @@ import Avatar from "./avatar";
 import { createClient } from "@/utils/supabase/client";
 import { updateProfileAvatar } from "@/app/actions";
 import { AppContext, useApp } from "@/utils/context/app.context";
+import { useOutsideAlerter } from "@/utils/hooks/useOutsideAlerter";
 
 const externalLinks = [
   {
@@ -49,10 +51,13 @@ const externalLinks = [
 
 export const Nav: FC = () => {
   const segments = useSelectedLayoutSegments();
-  const { avatar, user } = useApp();
+  const { avatar, user, showNavbar, setShowNavbar } = useApp();
 
   const { id } = useParams() as { id?: string };
   const [siteId, setSiteId] = useState<string | null>();
+
+  const wrapperRef = useRef(null);
+  useOutsideAlerter(wrapperRef);
 
   const tabs = useMemo(() => {
     return [
@@ -83,26 +88,26 @@ export const Nav: FC = () => {
     ];
   }, [segments, id, siteId]);
 
-  const [showSidebar, setShowSidebar] = useState(false);
-
   const pathname = usePathname();
 
   useEffect(() => {
     // hide sidebar on path change
-    setShowSidebar(false);
+    setShowNavbar(false);
   }, [pathname]);
 
   return (
     <>
-      <button
-        className={`fixed z-20 right-5 top-3 md:hidden`}
-        onClick={() => setShowSidebar(!showSidebar)}
-      >
-        <Menu width={20} />
-      </button>
+      <div className="w-full bg-base-300 fixed flex flex-row justify-end items-end">
+        <button
+          className={`md:hidden m-4`}
+          onClick={() => setShowNavbar(!showNavbar)}
+        >
+          <Menu width={20} />
+        </button>
+      </div>
       <div
         className={`transform bg-base-100 ${
-          showSidebar ? "w-[75%] translate-x-0" : "-translate-x-full"
+          showNavbar ? "w-[75%] translate-x-0" : "-translate-x-full"
         } fixed z-10 flex h-full flex-col justify-between border-r transition-all  md:w-80 md:translate-x-0`}
       >
         <div className="flex flex-col h-full">

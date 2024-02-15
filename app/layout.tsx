@@ -1,31 +1,47 @@
+"use client";
+
 import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
-import { AppContext, AppContextProvider } from "@/utils/context/app.context";
+import {
+  AppContext,
+  AppContextProvider,
+  useApp,
+} from "@/utils/context/app.context";
 import { useContext } from "react";
 import { User } from "@supabase/supabase-js";
+import cn from "classnames";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
 
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
-};
+// export const metadata = {
+//   metadataBase: new URL(defaultUrl),
+//   title: "Next.js and Supabase Starter Kit",
+//   description: "The fastest way to build apps with Next.js and Supabase",
+// };
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { showNavbar } = useApp();
   return (
     <AppContextProvider avatar={""} user={{} as User}>
       <html lang="en">
+        <head>
+          <title>ViewTube - Test</title>
+          <meta name="metadataBase" content={defaultUrl} />
+        </head>
         {/* <body className="bg-black text-foreground"> */}
-        <body>
+        <body
+          className={cn("", {
+            "blur-md pointer-events-none overflow-hidden": showNavbar,
+          })}
+        >
           <main>
             {children}
             <Analytics />

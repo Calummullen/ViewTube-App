@@ -15,6 +15,8 @@ type Context = {
   setAvatar: (url: string) => void;
   user: User;
   setUser: (user: User) => void;
+  showNavbar: boolean;
+  setShowNavbar: (flag: boolean) => void;
 };
 
 export const AppContext = createContext<Context>({} as Context);
@@ -29,6 +31,7 @@ export const AppContextProvider: FC<{
 
   const [avatar, setAvatar] = useState<string>(userAvatar);
   const [user, setUser] = useState<User>(userData);
+  const [showNavbar, setShowNavbar] = useState<boolean>(false);
 
   const updateTheme = (theme: string) => {
     setTheme(theme);
@@ -51,6 +54,8 @@ export const AppContextProvider: FC<{
         setAvatar,
         user,
         setUser,
+        showNavbar,
+        setShowNavbar,
       }}
     >
       {children}
