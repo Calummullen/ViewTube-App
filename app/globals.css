@@ -31,6 +31,12 @@
   animation: animateIn 0.5s ease-in;
 }
 
+body {
+  &.disable-overflow {
+    overflow: hidden;
+  }
+}
+
 @keyframes animateIn {
   from {
     opacity: 0;

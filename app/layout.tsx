@@ -9,7 +9,7 @@ import {
   AppContextProvider,
   useApp,
 } from "@/utils/context/app.context";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import cn from "classnames";
 
@@ -29,6 +29,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { showNavbar } = useApp();
+
+  // useEffect(() => {
+  //   document.body.classList.add("overflow:hidden");
+  // }, [showNavbar]);
   return (
     <AppContextProvider avatar={""} user={{} as User}>
       <html lang="en">
@@ -37,11 +41,7 @@ export default function RootLayout({
           <meta name="metadataBase" content={defaultUrl} />
         </head>
         {/* <body className="bg-black text-foreground"> */}
-        <body
-          className={cn("", {
-            "blur-md pointer-events-none overflow-hidden": showNavbar,
-          })}
-        >
+        <body>
           <main>
             {children}
             <Analytics />

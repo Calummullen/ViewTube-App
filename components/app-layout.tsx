@@ -14,11 +14,17 @@ const AppLayout: FC<Props> = ({ children }) => {
   const { showNavbar } = useApp();
 
   return (
-    <div className="!overflow-hidden">
+    <div>
       <Nav />
       <Suspense fallback={<Loading />}>
         <div className={cn("min-h-screen md:ml-80 flex flex-col", {})}>
-          <div className={cn("p-4 mt-12 md:mt-0", {})}>{children}</div>
+          <div
+            className={cn("p-4 mt-12 md:mt-0", {
+              "blur-md pointer-events-none": showNavbar,
+            })}
+          >
+            {children}
+          </div>
         </div>
       </Suspense>
     </div>

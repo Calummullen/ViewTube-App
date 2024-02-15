@@ -33,6 +33,12 @@ export const AppContextProvider: FC<{
   const [user, setUser] = useState<User>(userData);
   const [showNavbar, setShowNavbar] = useState<boolean>(false);
 
+  useEffect(() => {
+    showNavbar
+      ? document.body.classList.add("disable-overflow")
+      : document.body.classList.remove("disable-overflow");
+  }, [showNavbar]);
+
   const updateTheme = (theme: string) => {
     setTheme(theme);
     console.log("hhere123");

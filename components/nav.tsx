@@ -97,14 +97,12 @@ export const Nav: FC = () => {
 
   return (
     <>
-      <div className="w-full bg-base-300 fixed flex flex-row justify-end items-end">
-        <button
-          className={`md:hidden m-4`}
-          onClick={() => setShowNavbar(!showNavbar)}
-        >
-          <Menu width={20} />
-        </button>
-      </div>
+      <button
+        className={`fixed z-20 right-5 top-3 md:hidden`}
+        onClick={() => setShowNavbar(!showNavbar)}
+      >
+        <Menu width={20} />
+      </button>
       <div
         className={`transform bg-base-100 ${
           showNavbar ? "w-[75%] translate-x-0" : "-translate-x-full"
