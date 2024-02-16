@@ -13,23 +13,9 @@ import {
   usePathname,
   useSelectedLayoutSegments,
 } from "next/navigation";
-import {
-  FC,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useCallback,
-  useState,
-  useContext,
-  useRef,
-} from "react";
-import { User } from "@supabase/supabase-js";
-import { logout } from "@/utils/supabase/userHelper";
+import { FC, useEffect, useMemo, useState } from "react";
 import Avatar from "./avatar";
-import { createClient } from "@/utils/supabase/client";
-import { updateProfileAvatar } from "@/app/actions";
-import { AppContext, useApp } from "@/utils/context/app.context";
-import { useOutsideAlerter } from "@/utils/hooks/useOutsideAlerter";
+import { useApp } from "@/utils/context/app.context";
 
 const externalLinks = [
   {
@@ -55,9 +41,6 @@ export const Nav: FC = () => {
 
   const { id } = useParams() as { id?: string };
   const [siteId, setSiteId] = useState<string | null>();
-
-  const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef);
 
   const tabs = useMemo(() => {
     return [

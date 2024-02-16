@@ -175,7 +175,7 @@ const Settings: FC<Props> = ({ user }) => {
               <summary className="w-full btn btn-info min-w-[200px]">
                 Select theme
               </summary>
-              <ul className="shadow dropdown-content z-[1] cursor-pointer">
+              <ul className="shadow dropdown-content z-[1] cursor-pointer w-full">
                 {Themes.map((theme) => (
                   <li
                     key={theme}

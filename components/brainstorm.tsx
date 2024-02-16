@@ -3,6 +3,7 @@
 import { FC, useEffect, useState } from "react";
 import { SendHorizonal } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { format } from "date-fns";
 import {
   chatCompletion,
   uploadChatResponse,
@@ -214,7 +215,7 @@ const Brainstorm: FC = () => {
                   <th>{index + 1}</th>
                   <td>{item.prompt}</td>
                   <td>{item.response}</td>
-                  <td>{item.createdAt.toString()}</td>
+                  <td>{format(item.createdAt, "dd/MM/yyyy kk:mm:ss")}</td>
                   {!showDeleteColumn ? (
                     <td className="flex-col justify-center items-center">
                       <input
