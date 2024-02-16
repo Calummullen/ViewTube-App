@@ -243,7 +243,6 @@ const Brainstorm: FC = () => {
           </table>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import {
 import { useContext, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import cn from "classnames";
+import { ToastContainer } from "react-toastify";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -41,12 +42,13 @@ export default function RootLayout({
           <meta name="metadataBase" content={defaultUrl} />
         </head>
         {/* <body className="bg-black text-foreground"> */}
-        <body>
+        <body className="font-gtwalsheim">
           <main>
             {children}
             <Analytics />
             <SpeedInsights />
           </main>
+          <ToastContainer />
         </body>
       </html>
     </AppContextProvider>

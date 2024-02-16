@@ -9,7 +9,10 @@ import { createClient } from "@/utils/supabase/client";
 import { AppContext, useApp } from "@/utils/context/app.context";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "./loading-spinner";
+import { Upload } from "lucide-react";
 import cn from "classnames";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface Props {
   user: User;
@@ -49,26 +52,48 @@ const Settings: FC<Props> = ({ user }) => {
           buttonType="toggle"
           clickHandler={() => {}}
           alternativeButton={
-            <input
-              type="file"
-              className="file-input file-input-bordered file-input-info w-full max-w-xs"
-              onChange={async (e) => {
-                setIsLoading(true);
-                const files = e.target.files;
-                if (!files) {
-                  return new Error("Invalid image selection.");
-                }
-                const fileExt = files[0].name.split(".").pop();
-                const filePath = `${user.id}-${Math.random()}.${fileExt}`;
-                const client = createClient();
+            <label className="flex flex-row lg:max-w-[200px]">
+              <span className="btn btn-info rounded-r-none">
+                <Upload width={20} />
+              </span>
 
-                await client.storage.from("avatars").upload(filePath, files[0]);
-                await updateProfileAvatar(user.id, filePath);
+              <input
+                type="file"
+                className="file-input flex-grow file-input-bordered [&.file-input:focus]:outline-none [&::file-selector-button]:hidden p-3 rounded-l-none"
+                onChange={async (e) => {
+                  try {
+                    setIsLoading(true);
+                    const files = e.target.files;
+                    if (!files) {
+                      throw new Error("Invalid image selection.");
+                    }
+                    const fileExt = files[0].name.split(".").pop();
+                    const filePath = `${user.id}-${Math.random()}.${fileExt}`;
+                    const client = createClient();
 
-                setAvatar(filePath);
-                setIsLoading(false);
-              }}
-            />
+                    await client.storage
+                      .from("avatars")
+                      .upload(filePath, files[0]);
+                    const { data, error } = await updateProfileAvatar(
+                      user.id,
+                      filePath
+                    );
+
+                    setAvatar(filePath);
+                    toast(`Successfully updated avatar.`, {
+                      type: "success",
+                    });
+                  } catch (error) {
+                    console.log("error123", error);
+                    toast(`Error uploading avatar. Please try again.`, {
+                      type: "error",
+                    });
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+              />
+            </label>
           }
         />
         <SettingsSection
@@ -101,16 +126,6 @@ const Settings: FC<Props> = ({ user }) => {
           }}
           buttonType="warning"
           clickHandler={async () => await logout()}
-        />
-        <SettingsSection
-          content={{
-            title: "Delete account",
-            description:
-              "Permanently remove your ViewTube account. This action is not reversible, so please continue with caution.",
-            buttonText: "Delete account",
-          }}
-          buttonType="error"
-          clickHandler={async () => {}}
         />
         <SettingsSection
           content={{
@@ -192,6 +207,26 @@ const Settings: FC<Props> = ({ user }) => {
           }
           clickHandler={async () => logout()}
         />
+        <SettingsSection
+          content={{
+            title: "Cancel subscription",
+            description:
+              "To cancel your subscription, just click the button to the right. Don't worry, we won't hassle you to stay, and your subscription will remain active until the final billing period of X date",
+            buttonText: "Cancel subscription",
+          }}
+          buttonType="error"
+          clickHandler={async () => {}}
+        />
+        <SettingsSection
+          content={{
+            title: "Delete account",
+            description:
+              "Permanently remove your ViewTube account. This action is not reversible, so please continue with caution.",
+            buttonText: "Delete account",
+          }}
+          buttonType="error"
+          clickHandler={async () => {}}
+        />
       </div>
     </div>
   );
@@ -219,7 +254,14 @@ const SettingsSection: FC<SettingsScreenProps> = ({
   const buttonColour = ButtonColour[buttonType];
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row justify-between border rounded-lg border-stone-700 p-4 lg:items-center">
+    <div
+      className={cn(
+        "flex flex-col gap-4 lg:gap-24 lg:flex-row justify-between border rounded-lg border-stone-700 p-4 lg:items-center",
+        {
+          "border-error": buttonType === "error",
+        }
+      )}
+    >
       <div className="flex flex-col gap-4">
         <h3 className="text-xl">{content.title}</h3>
         <p className="">{content.description}</p>

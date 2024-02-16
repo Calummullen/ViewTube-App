@@ -27,7 +27,7 @@ const createSBClient = () => {
 // TODO: get event.target.files type
 export const updateProfileAvatar = async (id: string, filePath: string) => {
   const createClient = createSBClient();
-  const { data, error } = await createClient
+  return await createClient
     .from("profiles")
     .upsert({ id, avatar_url: filePath });
 };

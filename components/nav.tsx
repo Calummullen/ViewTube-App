@@ -7,6 +7,7 @@ import {
   Settings,
   TrendingUp,
   Lightbulb,
+  Image,
 } from "lucide-react";
 import {
   useParams,
@@ -63,6 +64,13 @@ export const Nav: FC = () => {
         icon: <TrendingUp width={18} />,
       },
       {
+        name: "Thumbnail Generation",
+        href: "thumbnail-generation",
+        isActive: segments[0] === "thumbnail-generation",
+        icon: <Image width={18} />,
+        isBeta: true,
+      },
+      {
         name: "Settings",
         href: "/settings",
         isActive: segments[0] === "settings",
@@ -100,17 +108,18 @@ export const Nav: FC = () => {
             </div>
           </div>
 
-          {tabs.map(({ name, href, isActive, icon }) => (
+          {tabs.map(({ name, href, isActive, icon, isBeta }) => (
             <Link
               key={name}
               href={href}
-              className={`flex items-center gap-4 py-4 px-6 ${
+              className={`flex items-center gap-4 py-4 px-6 hover:bg-base-300 ${
                 isActive ? "bg-base-300" : ""
               } last:mt-auto transition-all duration-150 ease-in-out`}
             >
               {/*               } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:hover:bg-stone-700 dark:active:bg-stone-800`} */}
               {icon}
               <span className="text-lg font-medium">{name}</span>
+              {isBeta && <div className="badge badge-info px-4 py-3">beta</div>}
             </Link>
           ))}
         </div>

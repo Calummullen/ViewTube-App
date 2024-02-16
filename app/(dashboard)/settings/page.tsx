@@ -10,8 +10,6 @@ const SettingsPage = async () => {
     throw new Error("Unable to find user.");
   }
 
-  // const theme = localStorage.getItem("data-theme") || "light";
-
   return (
     <Suspense>
       <Settings user={user} />

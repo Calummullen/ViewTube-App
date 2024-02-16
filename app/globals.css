@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'GT Walsheim';
+    font-weight: 400;
+    src: local('GT Walsheim'), local('GT Walsheim'), url('./fonts/GT-Walsheim-Regular.woff') format('woff'), url('./fonts/GT-Walsheim-Regular.woff2') format('woff2');
+  }
+  /* @font-face {
+    font-family: GT Walsheim;
+    font-weight: 500;
+    src: url('/app/fonts/GT-Walsheim-Medium.woff');
+  }
+  @font-face {
+    font-family: GT Walsheim;
+    font-weight: 700;
+    src: url('/app/fonts/GT-Walsheim-Bold.woff');
+  } */
+}
 /* @layer base {
   :root {
     --background: 200 20% 98%;
