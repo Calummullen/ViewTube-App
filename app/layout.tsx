@@ -1,5 +1,3 @@
-"use client";
-
 import { GeistSans } from "geist/font/sans";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -13,6 +11,7 @@ import { useContext, useEffect } from "react";
 import { User } from "@supabase/supabase-js";
 import cn from "classnames";
 import { ToastContainer } from "react-toastify";
+import { getUser } from "@/utils/supabase/userHelper";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -24,19 +23,20 @@ const defaultUrl = process.env.VERCEL_URL
 //   description: "The fastest way to build apps with Next.js and Supabase",
 // };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { showNavbar } = useApp();
+  const user = await getUser();
+  console.log("user", user);
 
   // useEffect(() => {
   //   document.body.classList.add("overflow:hidden");
   // }, [showNavbar]);
   return (
-    <AppContextProvider avatar={""} user={{} as User}>
-      <html lang="en">
+    <AppContextProvider avatar={""} user={user || ({} as User)}>
+      <html lang="en" data-theme={user?.user_metadata.dataTheme}>
         <head>
           <title>ViewTube - Test</title>
           <meta name="metadataBase" content={defaultUrl} />

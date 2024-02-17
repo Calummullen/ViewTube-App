@@ -1,33 +1,24 @@
 "use client";
+
 import { YoutubeService } from "@/app/services/youtube.service";
+import { getYoutubes } from "@/utils/youtube/youtube-server";
 import { FC, useEffect, useState } from "react";
 
-const youtubeService = new YoutubeService();
+// const youtubeService = new YoutubeService();
 
 export const Dashboard: FC = () => {
-  const TestRequest = async () => {
-    const test = await youtubeService.getMostPopularVideos();
-    console.log(test);
+  const testMe = async () => {
+    const test = await getYoutubes();
+    console.log("calumpog", test);
     setMainVideoTitle(test.items[0].snippet.title);
     setMainViews(test.items[0].snippet.publishedAt);
   };
-
-  // const [theme, setTheme] = useState("light");
-
-  // const handleToggle = (e: { target: { checked: any } }) => {
-  //   if (e.target.checked) {
-  //     setTheme("dark");
-  //   } else {
-  //     setTheme("light");
-  //   }
+  // const TestRequest = async () => {
+  //   const test = await youtubeService.getMostPopularVideos();
+  //   console.log("fff", test);
+  //   setMainVideoTitle(test.items[0].snippet.title);
+  //   setMainViews(test.items[0].snippet.publishedAt);
   // };
-
-  // useEffect(() => {
-  //   localStorage.setItem("theme", theme);
-  //   const localTheme = localStorage.getItem("theme");
-  //   // add custom data-theme attribute to html tag required to update theme using DaisyUI
-  //   document.documentElement.setAttribute("data-theme", localTheme ?? "");
-  // }, [theme]);
 
   const [mainVideoTitle, setMainVideoTitle] = useState<string>();
   const [mainVideoViews, setMainViews] = useState<string>();
@@ -40,6 +31,13 @@ export const Dashboard: FC = () => {
         <h1 className="text-lg font-bold mx-4">Your Website</h1>
       </div> */}
       <div className="flex-none">
+        <div>
+          <p>Dashboard Page</p>
+          <button onClick={testMe}>Click Me</button>
+          {mainVideoTitle && <p>{mainVideoTitle}</p>}
+          {mainVideoViews && <p>{new Date(mainVideoViews).toLocaleString()}</p>}
+        </div>
+
         {/* <button className="btn btn-square btn-ghost">
           <label className="swap swap-rotate w-12 h-12">
             <input
@@ -58,12 +56,4 @@ export const Dashboard: FC = () => {
       </div>
     </div>
   );
-  // return (
-  //   <div>
-  //     <p>Dashboard Page</p>
-  //     <button onClick={() => TestRequest()}>Click Me</button>
-  //     {mainVideoTitle && <p>{mainVideoTitle}</p>}
-  //     {mainVideoViews && <p>{new Date(mainVideoViews).toLocaleString()}</p>}
-  //   </div>
-  // );
 };

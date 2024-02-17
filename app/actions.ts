@@ -57,6 +57,15 @@ export const resetUserPassword = async (formData: { email: string }) => {
   return JSON.stringify(response);
 };
 
+export const setUserTheme = async (dataTheme: string) => {
+  const createClient = createSBClient();
+  const response = await createClient.auth.updateUser({
+    data: {
+      dataTheme,
+    },
+  });
+};
+
 export const registerUserAction = async (
   formData: RegisterUser
 ): Promise<string> => {

@@ -1,6 +1,6 @@
 "use client";
 
-import { updateProfileAvatar } from "@/app/actions";
+import { setUserTheme, updateProfileAvatar } from "@/app/actions";
 import { Themes } from "@/app/entities/settings/themes.types";
 import { logout } from "@/utils/supabase/userHelper";
 import { FC, ReactNode, useEffect, useState, useContext } from "react";
@@ -21,15 +21,19 @@ interface Props {
 const Settings: FC<Props> = ({ user }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { theme, updateTheme, setAvatar } = useApp();
-  const toggleTheme = (inputTheme: string) => {
+  const toggleTheme = async (inputTheme: string) => {
     updateTheme(theme === inputTheme ? "light" : inputTheme);
+    await setUserTheme(inputTheme);
   };
+  const [isChecked, setIsChecked] = useState<boolean>(theme === "dark");
 
-  useEffect(() => {
-    if (!theme) return;
-    document.querySelector("html")?.setAttribute("data-theme", theme);
-    updateTheme(theme);
-  }, [theme]);
+  // useEffect(() => {
+  //   if (!theme) return;
+  //   document.querySelector("html")?.setAttribute("data-theme", theme);
+  //   updateTheme(theme);
+  // }, [theme]);
+
+  console.log("pogies", theme === "dark");
 
   return (
     <div
@@ -153,12 +157,12 @@ const Settings: FC<Props> = ({ user }) => {
               </svg>
               <input
                 type="checkbox"
-                value="dark"
-                defaultChecked={theme === "dark"}
+                defaultChecked={isChecked}
                 className="toggle"
-                onClick={(e) =>
-                  toggleTheme((e.target as any).checked ? "dark" : "light")
-                }
+                onClick={(e) => {
+                  toggleTheme((e.target as any).checked ? "dark" : "light");
+                  setIsChecked((e.target as any).checked);
+                }}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"

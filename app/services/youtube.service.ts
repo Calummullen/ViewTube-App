@@ -23,3 +23,25 @@ export class YoutubeService extends BaseService {
     });
   }
 }
+
+// export const getMostPopularVideosTest = async () => {
+//   if (!process.env.GOOGLE_API_URL || !process.env.GOOGLE_API_KEY) {
+//     throw new Error("Required env vars for YoutubeService not set.");
+//   }
+//   console.log(process.env.GOOGLE_API_URL);
+//   const test = await fetch(
+//     `https://youtube.googleapis.com/youtube/v3?${new URLSearchParams({
+//       part: "snippet,contentDetails,statistics",
+//       chart: "mostPopular",
+//       regionCode: "US",
+//       key: process.env.GOOGLE_API_KEY ?? "",
+//     })}`,
+//     {
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       method: "GET",
+//     }
+//   );
+//   console.log(test);
+// };

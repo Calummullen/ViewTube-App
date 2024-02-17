@@ -26,8 +26,17 @@ export const AppContextProvider: FC<{
   avatar: string;
   user: User;
 }> = ({ children, avatar: userAvatar, user: userData }) => {
-  const [theme, setTheme] = useState<string>("");
-  console.log("ahhhhhhh", theme);
+  // const [theme, setTheme] = useState<string>(
+  //   typeof window !== "undefined"
+  //     ? localStorage.getItem("data-theme") || "pog"
+  //     : "pig"
+  // );
+  const [theme, setTheme] = useState<string>(userData?.user_metadata.dataTheme);
+  // useEffect(() => {
+  //   document.querySelector("html")?.setAttribute("data-theme", theme);
+  // }, []);
+
+  console.log("context", theme);
 
   const [avatar, setAvatar] = useState<string>(userAvatar);
   const [user, setUser] = useState<User>(userData);
@@ -40,9 +49,9 @@ export const AppContextProvider: FC<{
   }, [showNavbar]);
 
   const updateTheme = (theme: string) => {
-    setTheme(theme);
-    console.log("hhere123");
+    document.querySelector("html")?.setAttribute("data-theme", theme);
     localStorage.setItem("data-theme", theme);
+    setTheme(theme);
   };
 
   // useEffect(() => {

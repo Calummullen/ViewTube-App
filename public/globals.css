@@ -1240,7 +1240,7 @@ body {
   text-decoration-line: line-through;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   .dark\:text-white {
     --tw-text-opacity: 1;
     color: rgb(255 255 255 / var(--tw-text-opacity));
@@ -1255,7 +1255,7 @@ body {
     --tw-bg-opacity: 1;
     background-color: rgb(41 37 36 / var(--tw-bg-opacity));
   }
-}
+} */
 
 @media (min-width: 640px) {
   .sm\:hidden {
