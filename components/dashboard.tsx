@@ -1,7 +1,7 @@
 "use client";
 
 import { YoutubeService } from "@/app/services/youtube.service";
-import { getKeywords, getYoutubes } from "@/utils/youtube/youtube-server";
+import { getSearchTerms, getYoutubes } from "@/utils/youtube/youtube-server";
 import { FC, useEffect, useState } from "react";
 
 // const youtubeService = new YoutubeService();
@@ -15,7 +15,7 @@ export const Dashboard: FC = () => {
   };
 
   const testMeKeywords = async () => {
-    const test = await getKeywords("warzone");
+    const test = await getSearchTerms("warzone");
     console.log("keyword response", test.items);
   };
   // const TestRequest = async () => {
