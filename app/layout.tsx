@@ -29,11 +29,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const user = await getUser();
-  console.log("user", user);
 
-  // useEffect(() => {
-  //   document.body.classList.add("overflow:hidden");
-  // }, [showNavbar]);
   return (
     <AppContextProvider avatar={""} user={user || ({} as User)}>
       <html lang="en" data-theme={user?.user_metadata.dataTheme}>

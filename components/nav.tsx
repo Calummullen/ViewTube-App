@@ -8,6 +8,8 @@ import {
   TrendingUp,
   Lightbulb,
   Image,
+  Gem,
+  WholeWord,
 } from "lucide-react";
 import {
   useParams,
@@ -17,6 +19,7 @@ import {
 import { FC, useEffect, useMemo, useState } from "react";
 import Avatar from "./avatar";
 import { useApp } from "@/utils/context/app.context";
+import cn from "classnames";
 
 const externalLinks = [
   {
@@ -58,6 +61,12 @@ export const Nav: FC = () => {
         icon: <Lightbulb width={18} />,
       },
       {
+        name: "Search Term Analytics",
+        href: "/search-term-analytics",
+        isActive: segments[0] === "search-term-analytics",
+        icon: <WholeWord width={18} />,
+      },
+      {
         name: "Trending",
         href: "/trending",
         isActive: segments[0] === "trending",
@@ -69,6 +78,13 @@ export const Nav: FC = () => {
         isActive: segments[0] === "thumbnail-generation",
         icon: <Image width={18} />,
         isBeta: true,
+      },
+      {
+        name: "Promotional Ad",
+        href: "promotional-ad",
+        isActive: segments[0] === "promotional-ad",
+        icon: <Gem width={18} />,
+        isDisabled: true,
       },
       {
         name: "Settings",
@@ -108,13 +124,17 @@ export const Nav: FC = () => {
             </div>
           </div>
 
-          {tabs.map(({ name, href, isActive, icon, isBeta }) => (
+          {tabs.map(({ name, href, isActive, icon, isBeta, isDisabled }) => (
             <Link
               key={name}
               href={href}
-              className={`flex items-center gap-4 py-4 px-6 hover:bg-base-300 ${
-                isActive ? "bg-base-300" : ""
-              } last:mt-auto transition-all duration-150 ease-in-out`}
+              className={cn(
+                `flex items-center gap-4 py-4 px-6 hover:bg-base-300 last:mt-auto transition-all duration-150 ease-in-out`,
+                {
+                  "bg-base-300": isActive,
+                  "btn-disabled opacity-30": isDisabled,
+                }
+              )}
             >
               {/*               } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:hover:bg-stone-700 dark:active:bg-stone-800`} */}
               {icon}

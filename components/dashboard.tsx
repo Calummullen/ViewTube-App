@@ -1,7 +1,7 @@
 "use client";
 
 import { YoutubeService } from "@/app/services/youtube.service";
-import { getYoutubes } from "@/utils/youtube/youtube-server";
+import { getKeywords, getYoutubes } from "@/utils/youtube/youtube-server";
 import { FC, useEffect, useState } from "react";
 
 // const youtubeService = new YoutubeService();
@@ -9,9 +9,14 @@ import { FC, useEffect, useState } from "react";
 export const Dashboard: FC = () => {
   const testMe = async () => {
     const test = await getYoutubes();
-    console.log("calumpog", test);
-    setMainVideoTitle(test.items[0].snippet.title);
-    setMainViews(test.items[0].snippet.publishedAt);
+    console.log("calumpog", test.items[0]);
+    // setMainVideoTitle(test.items[0].snippet.title);
+    // setMainViews(test.items[0].snippet.publishedAt);
+  };
+
+  const testMeKeywords = async () => {
+    const test = await getKeywords("warzone");
+    console.log("keyword response", test.items);
   };
   // const TestRequest = async () => {
   //   const test = await youtubeService.getMostPopularVideos();
@@ -31,11 +36,12 @@ export const Dashboard: FC = () => {
         <h1 className="text-lg font-bold mx-4">Your Website</h1>
       </div> */}
       <div className="flex-none">
-        <div>
+        <div className="">
           <p>Dashboard Page</p>
-          <button onClick={testMe}>Click Me</button>
+          <button onClick={testMe}>Click Me (Videos)</button>
           {mainVideoTitle && <p>{mainVideoTitle}</p>}
           {mainVideoViews && <p>{new Date(mainVideoViews).toLocaleString()}</p>}
+          <button onClick={testMeKeywords}>Click Me (Keywords)</button>
         </div>
 
         {/* <button className="btn btn-square btn-ghost">

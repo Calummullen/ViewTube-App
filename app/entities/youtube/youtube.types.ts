@@ -59,3 +59,46 @@ interface Thumbnail {
   url: string;
   width: number;
 }
+
+export interface SearchTermTrendResponse {
+  tasks: SearchTermTrendTask[];
+}
+
+export interface SearchTermTrendTask {
+  result: SearchTermTrendResult[];
+}
+
+export interface SearchTermTrendResult {
+  items_count: number;
+  items: {
+    position: number;
+    title: string;
+    searchTerms: string[];
+    data: SingleDataType[] | RelatedDataType;
+    averages: number[];
+  }[];
+}
+
+export interface SingleDataType {
+  date_from: string;
+  date_to: string;
+  timestamp: number;
+  values: string[];
+}
+
+export interface RelatedDataType {
+  top: { query: string; value: number }[];
+  rising: { query: string; value: number }[];
+}
+
+// export interface KeywordTopFiveTrendResult {
+//   items_count: number;
+//   items: {
+//     position: number;
+//     title: string;
+//     keywords: string[];
+//     data: {
+//       top: { query: string; value: number }[];
+//     };
+//   }[];
+// }
