@@ -20,8 +20,8 @@ const SkeletonLoader: FC<Props> = ({ rowCount }) => {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row gap-4">
-        <div className="skeleton h-12 w-2/3" />
-        <div className="skeleton h-12 w-1/3" />
+        <div className="skeleton h-14 w-2/3" />
+        <div className="skeleton h-14 w-1/3" />
       </div>
       {<div>{rows()}</div>}
     </div>
