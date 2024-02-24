@@ -91,6 +91,18 @@ export interface RelatedDataType {
   rising: { query: string; value: number }[];
 }
 
+export interface GetXVideosResponse {
+  items: {
+    snippet: {
+      title: string;
+      thumbnails: {
+        high: {
+          url: string;
+        };
+      };
+    };
+  }[];
+}
 // export interface KeywordTopFiveTrendResult {
 //   items_count: number;
 //   items: {

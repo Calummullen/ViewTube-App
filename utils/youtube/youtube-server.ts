@@ -1,5 +1,6 @@
 "use server";
 
+import { GetXVideosResponse } from "@/app/entities/youtube/youtube.types";
 // import { google } from "googleapis";
 import { format, addMonths, addDays } from "date-fns";
 
@@ -35,6 +36,65 @@ export const getYoutubes = async () => {
   });
 
   return await test.json();
+};
+
+export const getChannelIdViaHandle = async (handle: string) => {
+  const url = `${
+    process.env.GOOGLE_API_URL
+  }/channels?part=id&${new URLSearchParams({
+    // chart: "mostPopular",
+    forHandle: handle,
+    key: process.env.GOOGLE_API_KEY ?? "",
+  })}`;
+
+  try {
+    const test = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+
+    const response = await test.json();
+    console.log("response", response);
+    return response;
+  } catch (error) {
+    console.log("errror", error);
+  }
+};
+
+export const getFirstXVideosForUser = async (
+  handle: string
+): Promise<GetXVideosResponse> => {
+  const { items } = await getChannelIdViaHandle(handle);
+
+  const url = `${
+    process.env.GOOGLE_API_URL
+  }/search?part=snippet&${new URLSearchParams({
+    // chart: "mostPopular",
+    channelId: items[0].id,
+    order: "date",
+    type: "video",
+    videoDutation: "medium",
+    key: process.env.GOOGLE_API_KEY ?? "",
+  })}`;
+
+  try {
+    const test = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+      },
+      method: "GET",
+    });
+
+    const response = await test.json();
+    console.log("r.items", response.items);
+
+    return response;
+  } catch (error) {
+    console.log("errror", error);
+    throw error;
+  }
 };
 
 export const getSearchTerms = async (query: string) => {
