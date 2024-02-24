@@ -31,7 +31,9 @@ export const AppContextProvider: FC<{
   //     ? localStorage.getItem("data-theme") || "pog"
   //     : "pig"
   // );
-  const [theme, setTheme] = useState<string>(userData?.user_metadata.dataTheme);
+  const [theme, setTheme] = useState<string>(
+    userData?.user_metadata?.dataTheme || "light"
+  );
   // useEffect(() => {
   //   document.querySelector("html")?.setAttribute("data-theme", theme);
   // }, []);
