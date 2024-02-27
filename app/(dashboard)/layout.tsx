@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { FC, ReactNode, Suspense } from "react";
 import Loading from "./loading";
 import AppLayout from "@/components/app-layout";
-import WelcomePage from "./welcome/page";
 import Welcome from "@/components/welcome";
 
 interface Props {
