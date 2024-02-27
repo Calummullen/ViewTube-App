@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { FC, ReactNode, Suspense } from "react";
 import Loading from "./loading";
 import AppLayout from "@/components/app-layout";
+import WelcomePage from "./welcome/page";
+import Welcome from "@/components/welcome";
 
 interface Props {
   children: ReactNode;
@@ -22,7 +24,11 @@ const DashboardLayout: FC<Props> = async ({ children }) => {
 
   return (
     <AppContextProvider avatar={avatar} user={user}>
-      <AppLayout>{children}</AppLayout>
+      {!user.user_metadata.youtubeHandle ? (
+        <Welcome />
+      ) : (
+        <AppLayout>{children}</AppLayout>
+      )}
     </AppContextProvider>
   );
 };

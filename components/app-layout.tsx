@@ -12,7 +12,6 @@ interface Props {
 
 const AppLayout: FC<Props> = ({ children }) => {
   const { showNavbar } = useApp();
-
   return (
     <div>
       <Nav />

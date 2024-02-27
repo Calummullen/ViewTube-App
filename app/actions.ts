@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/server";
 import { RegisterUser } from "./entities/supabase/register-user";
 import { redirect } from "next/navigation";
 import { useSearchParams } from "next/navigation";
-import { AuthError } from "@supabase/supabase-js";
+import { AuthError, UserResponse } from "@supabase/supabase-js";
 
 const createSBClient = () => {
   const cookieStore = cookies();
@@ -66,6 +66,19 @@ export const setUserTheme = async (dataTheme: string) => {
   });
 };
 
+export const addYoutubeHandleToUser = async (
+  youtubeHandle: string
+): Promise<UserResponse> => {
+  const createClient = createSBClient();
+  const response = await createClient.auth.updateUser({
+    data: {
+      youtubeHandle,
+    },
+  });
+  console.log("response", response);
+  return response;
+};
+
 export const registerUserAction = async (
   formData: RegisterUser
 ): Promise<string> => {
@@ -82,6 +95,7 @@ export const registerUserAction = async (
       data: {
         firstName,
         surname,
+        youtubeHandle: "",
       },
     },
   });
