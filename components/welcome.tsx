@@ -40,7 +40,7 @@ const Welcome: FC = () => {
           </h3>
           <p className="text-2xl md:mx-36  animate-fade animate-delay-[4000ms]">
             To continue, please enter your YouTube handle in the input below.
-            This is required to correctly display you dashboard. No need to
+            This is required to correctly display your dashboard. No need to
             enter the @ symbol, this will be added automatically.
           </p>
           <form
