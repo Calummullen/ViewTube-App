@@ -29,11 +29,11 @@ const Welcome: FC = () => {
   };
 
   return (
-    <div className="mx-24 animate-fade animate-once animate-duration-[2000ms] animate-ease-in flex h-screen">
+    <div className="mx-8 md:mx-24 animate-fade animate-once animate-duration-[2000ms] animate-ease-in flex h-screen">
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="flex flex-col gap-8 text-center items-center my-12 md:m-auto">
+        <div className="flex flex-col gap-8 text-center items-center my-16 md:m-auto">
           <h2 className="font-bold text-7xl md:text-9xl  animate-fade animate-delay-[1000ms]">
             Welcome to View<span className="text-red-500">Tube</span>
           </h2>
