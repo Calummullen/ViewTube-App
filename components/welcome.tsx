@@ -34,7 +34,7 @@ const Welcome: FC = () => {
         <LoadingSpinner />
       ) : (
         <div className="flex flex-col gap-8 text-center items-center my-12 md:m-auto">
-          <h2 className="font-bold text-9xl  animate-fade animate-delay-[1000ms]">
+          <h2 className="font-bold text-7xl md:text-9xl  animate-fade animate-delay-[1000ms]">
             Welcome to View<span className="text-red-500">Tube</span>
           </h2>
           <h3 className="text-4xl  animate-fade animate-delay-[2500ms]">
