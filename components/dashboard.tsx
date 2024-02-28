@@ -2,6 +2,7 @@
 
 import { GetXVideosResponse } from "@/app/entities/youtube/youtube.types";
 import { YoutubeService } from "@/app/services/youtube.service";
+import { useApp } from "@/utils/context/app.context";
 import {
   getSearchTerms,
   getYoutubes,
@@ -13,6 +14,7 @@ import { FC, useEffect, useState } from "react";
 // const youtubeService = new YoutubeService();
 
 export const Dashboard: FC = () => {
+  const { user } = useApp();
   const testMe = async () => {
     const test = await getYoutubes();
     // setMainVideoTitle(test.items[0].snippet.title);
@@ -21,12 +23,18 @@ export const Dashboard: FC = () => {
 
   const testGetFirstXVideosForUser = async () => {
     setIsLoading(true);
-    const response = await getFirstXVideosForUser("timthetatman");
+    const response = await getFirstXVideosForUser(
+      user.user_metadata.youtubeHandle
+    );
     // setVideosResponse(test.items[0].snippet);
     console.log(response);
     setVideosResponse(response);
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    testGetFirstXVideosForUser();
+  }, []);
 
   const testMeKeywords = async () => {
     const test = await getSearchTerms("warzone");
@@ -60,9 +68,9 @@ export const Dashboard: FC = () => {
               <p>{new Date(mainVideoViews).toLocaleString()}</p>
             )}
             <button onClick={testMeKeywords}>Click Me (Keywords)</button> */}
-            <button onClick={testGetFirstXVideosForUser}>
+            {/* <button onClick={testGetFirstXVideosForUser}>
               Click Me (Get X Videos)
-            </button>
+            </button> */}
           </div>
 
           {/* <button className="btn btn-square btn-ghost">

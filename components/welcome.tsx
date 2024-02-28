@@ -13,6 +13,7 @@ interface Input {
 
 const Welcome: FC = () => {
   const { register, handleSubmit, getValues } = useForm<Input>();
+  const { user, setUser } = useApp();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -20,6 +21,7 @@ const Welcome: FC = () => {
   const onSubmit = async (data: Input) => {
     setIsLoading(true);
     const result = await addYoutubeHandleToUser(data.youtubeHandle);
+    setUser({ ...user, user_metadata: { youtubeHandle: data.youtubeHandle } });
     if (result.data.user?.user_metadata.youtubeHandle) {
       return router.push("/");
     }
