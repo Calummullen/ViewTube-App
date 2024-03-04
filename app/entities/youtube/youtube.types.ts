@@ -1,4 +1,4 @@
-interface MostPopularVideosResponse {
+export interface MostPopularVideosResponse {
   etag: string;
   items: MostPopularVideoItem[];
   kind: string;

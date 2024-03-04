@@ -1,3 +1,4 @@
+import { MostPopularVideosResponse } from "../entities/youtube/youtube.types";
 import { BaseService } from "./base.service";
 
 export class YoutubeService extends BaseService {
