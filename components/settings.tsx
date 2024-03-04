@@ -19,8 +19,7 @@ interface Props {
 }
 
 const Settings: FC<Props> = ({ user }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { theme, updateTheme, setAvatar } = useApp();
+  const { theme, updateTheme, setAvatar, isLoading, setIsLoading } = useApp();
   const toggleTheme = async (inputTheme: string) => {
     updateTheme(theme === inputTheme ? "light" : inputTheme);
     await setUserTheme(inputTheme);
@@ -44,7 +43,7 @@ const Settings: FC<Props> = ({ user }) => {
         }
       )}
     >
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <LoadingSpinner isFullscreen />}
       <div className="text-4xl">Account Settings</div>
       <div className="flex flex-col gap-8">
         <SettingsSection

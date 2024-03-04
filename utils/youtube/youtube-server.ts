@@ -1,8 +1,18 @@
 "use server";
 
 import { GetXVideosResponse } from "@/app/entities/youtube/youtube.types";
-// import { google } from "googleapis";
+import { google } from "googleapis";
+import { youtube } from "@googleapis/youtube";
 import { format, addMonths, addDays } from "date-fns";
+import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
+import { markAccountAsYoutubeAuthenticated } from "@/app/actions";
+
+let client = new google.auth.OAuth2({
+  clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
+  redirectUri: "http://localhost:3000/",
+});
 
 // // const youtube = google.youtube("v3");
 
@@ -16,6 +26,40 @@ import { format, addMonths, addDays } from "date-fns";
 // export const getYoutubes = async () => {
 
 // }
+// OAUTH
+export const authenticateYoutubeAccount = async () => {
+  const authUrl = client.generateAuthUrl({
+    access_type: "offline",
+    scope: [
+      "https://www.googleapis.com/auth/youtube.channel-memberships.creator",
+      "https://www.googleapis.com/auth/youtube.readonly",
+    ],
+    include_granted_scopes: true,
+  });
+
+  await markAccountAsYoutubeAuthenticated();
+
+  redirect(authUrl);
+};
+
+export const setYoutubeCredentials = async (code: string) => {
+  const { tokens } = await client.getToken(code);
+  client.setCredentials(tokens);
+};
+
+export const getYoutubeUserData = async () => {
+  console.log("credentials in testOauthYoutube", client.credentials);
+  const youtubeUserData = await google.youtube("v3").channels.list({
+    auth: client,
+    mine: true,
+    part: ["snippet,contentDetails,statistics"],
+  });
+  return JSON.stringify(youtubeUserData);
+  // console.log("testahhhh1", test.data.items[0].snippet);
+  // console.log("testahhhh2", test.data.items[0].contentDetails);
+  // console.log("testahhhh3", test.data.items[0].statistics);
+};
+// OAUTH
 
 export const getYoutubes = async () => {
   const url = `${
@@ -56,7 +100,7 @@ export const getChannelIdViaHandle = async (handle: string) => {
     });
 
     const response = await test.json();
-    console.log("response", response);
+    // console.log("response", response);
     return response;
   } catch (error) {
     console.log("errror", error);
@@ -66,6 +110,7 @@ export const getChannelIdViaHandle = async (handle: string) => {
 export const getFirstXVideosForUser = async (
   handle: string
 ): Promise<GetXVideosResponse> => {
+  console.log("handle", handle);
   const { items } = await getChannelIdViaHandle(handle);
 
   const url = `${
@@ -88,7 +133,6 @@ export const getFirstXVideosForUser = async (
     });
 
     const response = await test.json();
-    console.log("r.items", response.items);
 
     return response;
   } catch (error) {
@@ -114,9 +158,8 @@ export const getSearchTerms = async (query: string) => {
     });
 
     const response = await test.json();
-    console.log("response", response);
+
     return response;
-    console.log(response.items[0].snippet);
   } catch (error) {
     console.log("errror", error);
   }
@@ -164,7 +207,7 @@ export const getSearchTermTrends = async ({
     });
 
     const responseTest = await response.json();
-    console.log("response", responseTest);
+
     // console.log("response", (await response.json()) as KeywordTrendResponse);
     return responseTest;
   } catch (error) {

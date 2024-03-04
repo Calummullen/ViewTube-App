@@ -16,6 +16,7 @@ import { LabelInputProps } from "./reusable/props";
 import LabelAndInput from "./reusable/label-and-input";
 import LoadingSpinner from "./loading-spinner";
 import SkeletonLoader from "./reusable/skeleton-loader";
+import { useApp } from "@/utils/context/app.context";
 
 const getRelatedSearchTerms = (
   data: SearchTermTrendResponse,
@@ -60,7 +61,7 @@ const SearchTermAnalytics: FC = () => {
   const [tableResults, setTableResults] = useState<
     { searchTerm: string; average: number }[]
   >([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, setIsLoading } = useApp();
 
   const { register, handleSubmit, getValues } = useForm<LabelInputProps>();
 

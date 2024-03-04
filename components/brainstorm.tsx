@@ -39,7 +39,7 @@ const Brainstorm: FC = () => {
   const [rowsMarkedForDeletion, setRowsMarkedForDeletion] = useState<string[]>(
     []
   );
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { isLoading, setIsLoading } = useApp();
 
   const { register, handleSubmit, getValues } = useForm<Input>();
 

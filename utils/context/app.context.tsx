@@ -17,6 +17,8 @@ type Context = {
   setUser: (user: User) => void;
   showNavbar: boolean;
   setShowNavbar: (flag: boolean) => void;
+  isLoading: boolean;
+  setIsLoading: (isLoading: boolean) => void;
 };
 
 export const AppContext = createContext<Context>({} as Context);
@@ -43,6 +45,7 @@ export const AppContextProvider: FC<{
   const [avatar, setAvatar] = useState<string>(userAvatar);
   const [user, setUser] = useState<User>(userData);
   const [showNavbar, setShowNavbar] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     showNavbar
@@ -73,6 +76,8 @@ export const AppContextProvider: FC<{
         setUser,
         showNavbar,
         setShowNavbar,
+        isLoading,
+        setIsLoading,
       }}
     >
       {children}

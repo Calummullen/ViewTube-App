@@ -6,6 +6,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@googleapis/youtube": "^13.1.0",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
     "@vercel/analytics": "^1.1.2",
@@ -13,8 +14,10 @@
     "autoprefixer": "10.4.15",
     "date-fns": "^3.3.1",
     "geist": "^1.0.0",
+    "googleapis": "^133.0.0",
     "lucide-react": "^0.311.0",
     "next": "latest",
+    "next-auth": "^4.24.6",
     "openai": "^4.27.0",
     "postcss": "^8.4.31",
     "react": "18.2.0",

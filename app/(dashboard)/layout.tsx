@@ -23,7 +23,7 @@ const DashboardLayout: FC<Props> = async ({ children }) => {
 
   return (
     <AppContextProvider avatar={avatar} user={user}>
-      {!user.user_metadata.youtubeHandle ? (
+      {!user.user_metadata.isYoutubeAccountConnected ? (
         <Welcome />
       ) : (
         <AppLayout>{children}</AppLayout>
