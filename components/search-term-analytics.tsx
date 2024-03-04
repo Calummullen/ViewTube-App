@@ -1,22 +1,18 @@
 "use client";
 
-import { FC, useState } from "react";
-import { format, addDays } from "date-fns";
-import { getSearchTermTrends } from "@/utils/youtube/youtube-server";
-import {
-  SearchTermTrendResponse,
-  RelatedDataType,
-  SingleDataType,
-} from "@/app/entities/youtube/youtube.types";
-import cn from "classnames";
 import { SearchTermResults } from "@/app/entities/youtube/placeholder-data";
-import { useForm, SubmitHandler } from "react-hook-form";
-import LabelAndInputForm from "./reusable/label-and-input";
-import { LabelInputProps } from "./reusable/props";
-import LabelAndInput from "./reusable/label-and-input";
-import LoadingSpinner from "./loading-spinner";
-import SkeletonLoader from "./reusable/skeleton-loader";
+import {
+  RelatedDataType,
+  SearchTermTrendResponse,
+} from "@/app/entities/youtube/youtube.types";
 import { useApp } from "@/utils/context/app.context";
+import { getSearchTermTrends } from "@/utils/youtube/youtube-server";
+import cn from "classnames";
+import { FC, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import LabelAndInput from "./reusable/label-and-input";
+import { LabelInputProps } from "./reusable/props";
+import SkeletonLoader from "./reusable/skeleton-loader";
 
 const getRelatedSearchTerms = (
   data: SearchTermTrendResponse,

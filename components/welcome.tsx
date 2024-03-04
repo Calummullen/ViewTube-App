@@ -1,13 +1,11 @@
 "use client";
 
-import { markAccountAsYoutubeAuthenticated } from "@/app/actions";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { FC, useState } from "react";
-import LoadingSpinner from "./loading-spinner";
 import { useApp } from "@/utils/context/app.context";
 import { authenticateYoutubeAccount } from "@/utils/youtube/youtube-server";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { FC } from "react";
+import LoadingSpinner from "./loading-spinner";
 
 interface Input {
   isYoutubeAccountConnected: boolean;

@@ -1,12 +1,10 @@
 "use server";
 
-import { GetXVideosResponse } from "@/app/entities/youtube/youtube.types";
-import { google } from "googleapis";
-import { youtube } from "@googleapis/youtube";
-import { format, addMonths, addDays } from "date-fns";
-import { redirect } from "next/navigation";
-import { NextResponse } from "next/server";
 import { markAccountAsYoutubeAuthenticated } from "@/app/actions";
+import { GetXVideosResponse } from "@/app/entities/youtube/youtube.types";
+import { addMonths, format } from "date-fns";
+import { google } from "googleapis";
+import { redirect } from "next/navigation";
 
 let client = new google.auth.OAuth2({
   clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,

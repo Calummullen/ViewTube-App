@@ -1,16 +1,18 @@
 "use client";
 
-import Link from "next/link";
+import { useApp } from "@/utils/context/app.context";
+import cn from "classnames";
 import {
+  Gem,
+  Image,
   LayoutDashboard,
+  Lightbulb,
   Menu,
   Settings,
   TrendingUp,
-  Lightbulb,
-  Image,
-  Gem,
   WholeWord,
 } from "lucide-react";
+import Link from "next/link";
 import {
   useParams,
   usePathname,
@@ -18,8 +20,6 @@ import {
 } from "next/navigation";
 import { FC, useEffect, useMemo, useState } from "react";
 import Avatar from "./avatar";
-import { useApp } from "@/utils/context/app.context";
-import cn from "classnames";
 
 const externalLinks = [
   {

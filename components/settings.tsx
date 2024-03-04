@@ -2,17 +2,16 @@
 
 import { setUserTheme, updateProfileAvatar } from "@/app/actions";
 import { Themes } from "@/app/entities/settings/themes.types";
-import { logout } from "@/utils/supabase/userHelper";
-import { FC, ReactNode, useEffect, useState, useContext } from "react";
-import { User } from "@supabase/gotrue-js/src/lib/types";
+import { useApp } from "@/utils/context/app.context";
 import { createClient } from "@/utils/supabase/client";
-import { AppContext, useApp } from "@/utils/context/app.context";
-import { useRouter } from "next/navigation";
-import LoadingSpinner from "./loading-spinner";
-import { Upload } from "lucide-react";
+import { logout } from "@/utils/supabase/userHelper";
+import { User } from "@supabase/gotrue-js/src/lib/types";
 import cn from "classnames";
-import { ToastContainer, toast } from "react-toastify";
+import { Upload } from "lucide-react";
+import { FC, ReactNode, useState } from "react";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import LoadingSpinner from "./loading-spinner";
 
 interface Props {
   user: User;

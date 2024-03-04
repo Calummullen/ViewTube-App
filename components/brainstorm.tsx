@@ -1,19 +1,19 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
-import { SendHorizonal } from "lucide-react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { format } from "date-fns";
+import { useApp } from "@/utils/context/app.context";
 import {
   chatCompletion,
-  uploadChatResponse,
-  getChatResponses,
   deleteChatResponses,
+  getChatResponses,
   testImageGeneration,
+  uploadChatResponse,
 } from "@/utils/openai/openai-server";
-import { useTypewriter, Typewriter } from "react-simple-typewriter";
-import { useApp } from "@/utils/context/app.context";
-import { ToastContainer, toast } from "react-toastify";
+import { format } from "date-fns";
+import { SendHorizonal } from "lucide-react";
+import { FC, useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { Typewriter } from "react-simple-typewriter";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface Input {

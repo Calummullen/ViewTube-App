@@ -1,17 +1,13 @@
 "use client";
 
 import { GetXVideosResponse } from "@/app/entities/youtube/youtube.types";
-import { YoutubeService } from "@/app/services/youtube.service";
 import { useApp } from "@/utils/context/app.context";
-import Image from "next/image";
 import {
-  getSearchTerms,
-  getYoutubes,
-  getFirstXVideosForUser,
-  getChannelIdViaHandle,
   authenticateYoutubeAccount,
-  setYoutubeCredentials,
+  getSearchTerms,
   getYoutubeUserData,
+  getYoutubes,
+  setYoutubeCredentials,
 } from "@/utils/youtube/youtube-server";
 import { useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react";

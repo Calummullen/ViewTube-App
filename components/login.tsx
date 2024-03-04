@@ -1,11 +1,8 @@
 "use client";
 
+import { signIn } from "@/utils/supabase/userHelper";
 import Link from "next/link";
-import { headers, cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { getUser, signIn } from "@/utils/supabase/userHelper";
-import { Suspense, FC, createServerContext } from "react";
-import { AppContext } from "@/utils/context/app.context";
+import { FC } from "react";
 
 const Login: FC = () => {
   return (
