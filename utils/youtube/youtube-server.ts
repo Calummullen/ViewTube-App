@@ -6,7 +6,7 @@ import { addMonths, format } from "date-fns";
 import { google } from "googleapis";
 import { redirect } from "next/navigation";
 
-let client = new google.auth.OAuth2({
+const client = new google.auth.OAuth2({
   clientId: process.env.GOOGLE_OAUTH_CLIENT_ID,
   clientSecret: process.env.GOOGLE_OAUTH_CLIENT_SECRET,
   redirectUri: "http://localhost:3000/",
@@ -35,27 +35,26 @@ export const authenticateYoutubeAccount = async () => {
     include_granted_scopes: true,
   });
 
-  await markAccountAsYoutubeAuthenticated();
-
-  redirect(authUrl);
+  await markAccountAsYoutubeAuthenticated(authUrl);
 };
 
 export const setYoutubeCredentials = async (code: string) => {
-  const { tokens } = await client.getToken(code);
-  client.setCredentials(tokens);
+  try {
+    const { tokens } = await client.getToken(code);
+    client.setCredentials(tokens);
+  } catch (e) {
+    console.info("error123", e);
+  }
 };
 
-export const getYoutubeUserData = async () => {
-  console.log("credentials in testOauthYoutube", client.credentials);
+export const getDashboardHeaderData = async () => {
+  console.log("credentials in testOauthYoutube", client);
   const youtubeUserData = await google.youtube("v3").channels.list({
     auth: client,
     mine: true,
     part: ["snippet,contentDetails,statistics"],
   });
   return JSON.stringify(youtubeUserData);
-  // console.log("testahhhh1", test.data.items[0].snippet);
-  // console.log("testahhhh2", test.data.items[0].contentDetails);
-  // console.log("testahhhh3", test.data.items[0].statistics);
 };
 // OAUTH
 

@@ -66,17 +66,17 @@ export const setUserTheme = async (dataTheme: string) => {
   });
 };
 
-export const markAccountAsYoutubeAuthenticated =
-  async (): Promise<UserResponse> => {
-    const createClient = createSBClient();
-    const response = await createClient.auth.updateUser({
-      data: {
-        isYoutubeAccountConnected: true,
-      },
-    });
-    // console.log("response", response);
-    return response;
-  };
+export const markAccountAsYoutubeAuthenticated = async (
+  authUrl: string
+): Promise<UserResponse> => {
+  const createClient = createSBClient();
+  await createClient.auth.updateUser({
+    data: {
+      isYoutubeAccountConnected: true,
+    },
+  });
+  redirect(authUrl);
+};
 
 export const registerUserAction = async (
   formData: RegisterUser
