@@ -1,26 +1,34 @@
+import LoadingSpinner from "@/components/loading-spinner";
 import { Nav } from "@/components/nav";
-import { getUser } from "@/utils/supabase/userHelper";
+import { AppContextProvider, CustomBlob } from "@/utils/context/app.context";
+import { getUser, getUserAvatar, test } from "@/utils/supabase/userHelper";
 import { redirect } from "next/navigation";
 import { FC, ReactNode, Suspense } from "react";
+import Loading from "./loading";
+import AppLayout from "@/components/app-layout";
+import Welcome from "@/components/welcome";
 
 interface Props {
   children: ReactNode;
 }
 
 const DashboardLayout: FC<Props> = async ({ children }) => {
-  const isUserLoggedIn = await getUser();
+  const user = await getUser();
 
-  if (!isUserLoggedIn) {
+  if (!user) {
     redirect("/login");
   }
 
+  const avatar = await getUserAvatar(user.id);
+
   return (
-    <div>
-      <Nav>
-        <Suspense fallback={<div>Loading...</div>}></Suspense>
-      </Nav>
-      <div className="min-h-screen dark:bg-black sm:ml-60 p-4">{children}</div>
-    </div>
+    <AppContextProvider avatar={avatar} user={user}>
+      {!user.user_metadata.isYoutubeAccountConnected ? (
+        <Welcome />
+      ) : (
+        <AppLayout>{children}</AppLayout>
+      )}
+    </AppContextProvider>
   );
 };
 

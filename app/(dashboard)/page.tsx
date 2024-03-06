@@ -1,9 +1,15 @@
-import { FC } from "react";
+import { Dashboard } from "@/components/dashboard";
+import { FC, Suspense } from "react";
 
-const DashboardPage: FC = async () => (
-  <div>
-    <p>Dashboard Page</p>
-  </div>
-);
+const DashboardPage: FC = async () => {
+  return (
+    <Suspense>
+      {/* <div className="sm:hidden flex">
+      <Heading />
+    </div> */}
+      <Dashboard />
+    </Suspense>
+  );
+};
 
 export default DashboardPage;
