@@ -1,48 +1,27 @@
 "use client";
 
-import Link from "next/link";
+import { useApp } from "@/utils/context/app.context";
+import cn from "classnames";
 import {
-  ArrowLeft,
-  BarChart3,
-  Edit3,
-  Globe,
-  Layout,
+  Gem,
+  Image,
   LayoutDashboard,
-  Megaphone,
+  Lightbulb,
   Menu,
-  Newspaper,
   Settings,
-  FileCode,
-  Github,
+  TrendingUp,
+  WholeWord,
 } from "lucide-react";
+import Link from "next/link";
 import {
   useParams,
   usePathname,
   useSelectedLayoutSegments,
 } from "next/navigation";
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
+import Avatar from "./avatar";
 
 const externalLinks = [
-  // {
-  //   name: "Read announcement",
-  //   href: "https://vercel.com/blog/platforms-starter-kit",
-  //   icon: <Megaphone width={18} />,
-  // },
-  // {
-  //   name: "Star on GitHub",
-  //   href: "https://github.com/vercel/platforms",
-  //   icon: <Github width={18} />,
-  // },
-  // {
-  //   name: "Read the guide",
-  //   href: "https://vercel.com/guides/nextjs-multi-tenant-application",
-  //   icon: <FileCode width={18} />,
-  // },
-  // {
-  //   name: "View demo site",
-  //   href: "https://demo.vercel.pub",
-  //   icon: <Layout width={18} />,
-  // },
   {
     name: "Deploy your own",
     href: "https://vercel.com/templates/next.js/platforms-starter-kit",
@@ -60,10 +39,11 @@ const externalLinks = [
   },
 ];
 
-export const Nav = ({ children }: { children: ReactNode }) => {
+export const Nav: FC = () => {
   const segments = useSelectedLayoutSegments();
-  const { id } = useParams() as { id?: string };
+  const { avatar, user, showNavbar, setShowNavbar } = useApp();
 
+  const { id } = useParams() as { id?: string };
   const [siteId, setSiteId] = useState<string | null>();
 
   const tabs = useMemo(() => {
@@ -75,6 +55,38 @@ export const Nav = ({ children }: { children: ReactNode }) => {
         icon: <LayoutDashboard width={18} />,
       },
       {
+        name: "Brainstorm",
+        href: "/brainstorm",
+        isActive: segments[0] === "brainstorm",
+        icon: <Lightbulb width={18} />,
+      },
+      {
+        name: "Search Term Analytics",
+        href: "/search-term-analytics",
+        isActive: segments[0] === "search-term-analytics",
+        icon: <WholeWord width={18} />,
+      },
+      {
+        name: "Trending",
+        href: "/trending",
+        isActive: segments[0] === "trending",
+        icon: <TrendingUp width={18} />,
+      },
+      {
+        name: "Thumbnail Generation",
+        href: "thumbnail-generation",
+        isActive: segments[0] === "thumbnail-generation",
+        icon: <Image width={18} />,
+        isBeta: true,
+      },
+      {
+        name: "Promotional Ad",
+        href: "promotional-ad",
+        isActive: segments[0] === "promotional-ad",
+        icon: <Gem width={18} />,
+        isDisabled: true,
+      },
+      {
         name: "Settings",
         href: "/settings",
         isActive: segments[0] === "settings",
@@ -83,69 +95,63 @@ export const Nav = ({ children }: { children: ReactNode }) => {
     ];
   }, [segments, id, siteId]);
 
-  const [showSidebar, setShowSidebar] = useState(false);
-
   const pathname = usePathname();
 
   useEffect(() => {
     // hide sidebar on path change
-    setShowSidebar(false);
+    setShowNavbar(false);
   }, [pathname]);
 
   return (
     <>
       <button
-        className={`fixed z-20 ${
-          // left align for Editor, right align for other pages
-          !showSidebar ? "left-5 top-5" : "right-5 top-7"
-        } sm:hidden`}
-        onClick={() => setShowSidebar(!showSidebar)}
+        className={`fixed z-20 right-5 top-3 md:hidden`}
+        onClick={() => setShowNavbar(!showNavbar)}
       >
         <Menu width={20} />
       </button>
       <div
-        className={`transform ${
-          showSidebar ? "w-full translate-x-0" : "-translate-x-full"
-        } fixed z-10 flex h-full flex-col justify-between border-r border-stone-200 bg-stone-100 p-4 transition-all dark:border-stone-700 dark:bg-stone-900 sm:w-60 sm:translate-x-0`}
+        className={`transform bg-base-100 ${
+          showNavbar ? "w-[75%] translate-x-0" : "-translate-x-full"
+        } fixed z-10 flex h-full flex-col justify-between border-r transition-all  md:w-80 md:translate-x-0`}
       >
-        <div className="grid gap-2">
-          <div className="flex items-center space-x-2 rounded-lg px-2 py-1.5">
-            <a
-              href="https://vercel.com/templates/next.js/platforms-starter-kit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-lg p-1.5 hover:bg-stone-200 dark:hover:bg-stone-700"
+        <div className="flex flex-col h-full">
+          {/* <Heading /> */}
+          <div className="flex flex-row m-2 pb-4 gap-4 items-center border-b-2">
+            <Avatar uid={user.id} size={50} />
+            <div>
+              <p className="font-bold text-lg p-4 break-all text-center">{`${user.user_metadata.firstName} ${user.user_metadata.surname}`}</p>
+            </div>
+          </div>
+
+          {tabs.map(({ name, href, isActive, icon, isBeta, isDisabled }) => (
+            <Link
+              key={name}
+              href={href}
+              className={cn(
+                `flex items-center gap-4 py-4 px-6 hover:bg-base-300 last:mt-auto transition-all duration-150 ease-in-out`,
+                {
+                  "bg-base-300": isActive,
+                  "btn-disabled opacity-30": isDisabled,
+                }
+              )}
             >
-              <svg
-                width="26"
-                viewBox="0 0 76 65"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="text-black dark:text-white"
-              >
-                <path
-                  d="M37.5274 0L75.0548 65H0L37.5274 0Z"
-                  fill="currentColor"
-                />
-              </svg>
-            </a>
-          </div>
-          <div className="grid gap-1">
-            {tabs.map(({ name, href, isActive, icon }) => (
-              <Link
-                key={name}
-                href={href}
-                className={`flex items-center space-x-3 ${
-                  isActive ? "bg-stone-200 text-black dark:bg-stone-700" : ""
-                } rounded-lg px-2 py-1.5 transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:text-white dark:hover:bg-stone-700 dark:active:bg-stone-800`}
-              >
-                {icon}
-                <span className="text-sm font-medium">{name}</span>
-              </Link>
-            ))}
-          </div>
+              {/*               } last:mt-auto transition-all duration-150 ease-in-out hover:bg-stone-200 active:bg-stone-300 dark:hover:bg-stone-700 dark:active:bg-stone-800`} */}
+              {icon}
+              <span className="text-lg font-medium">{name}</span>
+              {isBeta && <div className="badge badge-info px-4 py-3">beta</div>}
+            </Link>
+          ))}
         </div>
-        <div>
+        {/* <div className="m-2">
+          <button
+            onClick={async () => logout()}
+            className="rounded-md bg-red-500 text-white text-lg p-4 w-full"
+          >
+            Logout
+          </button>
+        </div> */}
+        {/* <div>
           <div className="grid gap-1">
             {externalLinks.map(({ name, href, icon }) => (
               <a
@@ -164,7 +170,7 @@ export const Nav = ({ children }: { children: ReactNode }) => {
             ))}
           </div>
           {children}
-        </div>
+        </div> */}
       </div>
     </>
   );

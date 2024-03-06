@@ -22,7 +22,23 @@ import { getUser } from "./utils/supabase/userHelper";
 // RegExp for public files
 const PUBLIC_FILE = /\.(.*)$/; // Files
 
-export async function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest, res: NextResponse) {
+  // console.log("here123", res);
+  // console.log("here456", req.nextUrl);
+  // console.log("ahh", req.nextUrl.searchParams.get("code"));
+  // if (req.url.includes("code=4")) {
+  //   await fetch("http://localhost:3000/api/google-oauth");
+  // }
+  // req
+  // console.log("test555", req.nextUrl);
+  // if (req.url.includes("code=4")) {
+  //   const search = req.nextUrl.search;
+  //   var mySubString = search.substring(
+  //     search.indexOf("?code=4%2F") + 10,
+  //     search.lastIndexOf("&scope")
+  //   );
+  //   console.log(mySubString);
+  // }
   // const isUserLoggedIn = await getUser();
   // const url = req.nextUrl.clone();
   // if (isUserLoggedIn && (url.pathname === "/" || url.pathname === "/login")) {
